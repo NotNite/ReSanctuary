@@ -5,10 +5,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
-using Dalamud.Utility;
 using ImGuiNET;
-using ImGuiScene;
-using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ReSanctuary.Windows;
@@ -17,9 +14,11 @@ public class MainWindow : Window, IDisposable {
     private Plugin Plugin;
     private List<GatheringItem> items;
 
+    private string itemFilter = string.Empty;
+
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
         SizeConstraints = new WindowSizeConstraints {
-            MinimumSize = new Vector2(375, 330),
+            MinimumSize = new Vector2(300, 300),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
@@ -32,6 +31,9 @@ public class MainWindow : Window, IDisposable {
     private void DrawItemTab() {
         var tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingFixedFit;
 
+        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
+        ImGui.InputText(string.Empty, ref itemFilter, 256);
+
         if (ImGui.BeginTable("ReSanctuary_MainWindowTable", 3, tableFlags)) {
             ImGui.TableSetupColumn("Icon");
             ImGui.TableSetupColumn("Name");
@@ -39,6 +41,8 @@ public class MainWindow : Window, IDisposable {
             ImGui.TableHeadersRow();
 
             foreach (var item in items) {
+                if (!item.Name.ToLower().Contains(itemFilter.ToLower())) continue;
+
                 ImGui.TableNextRow();
 
                 ImGui.TableSetColumnIndex(0);
@@ -69,16 +73,16 @@ public class MainWindow : Window, IDisposable {
     private void DrawAboutTab() {
         ImGui.Text("ReSanctuary, made by NotNite.");
         ImGui.Text("If you like my work, please consider supporting me financially via GitHub Sponsors!");
-        
+
         if (ImGui.Button("View GitHub Page")) {
             Process.Start(new ProcessStartInfo {
                 FileName = "https://github.com/NotNite/ReSanctuary",
                 UseShellExecute = true
             });
         }
-        
+
         ImGui.SameLine();
-        
+
         if (ImGui.Button("Open GitHub Sponsors")) {
             Process.Start(new ProcessStartInfo {
                 FileName = "https://notnite.com/givememoney",

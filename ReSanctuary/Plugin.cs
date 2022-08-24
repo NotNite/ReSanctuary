@@ -26,7 +26,7 @@ public sealed class Plugin : IDalamudPlugin {
         WindowSystem.AddWindow(new MainWindow(this));
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
-            HelpMessage = "A useful message to display in /xlhelp"
+            HelpMessage = "Opens the main ReSanctuary interface."
         });
 
         PluginInterface.UiBuilder.Draw += DrawUI;
@@ -47,6 +47,6 @@ public sealed class Plugin : IDalamudPlugin {
     }
 
     public void DrawConfigUI() {
-        WindowSystem.GetWindow("A Wonderful Configuration Window").IsOpen = true;
+        WindowSystem.GetWindow("ReSanctuary Config").IsOpen = true;
     }
 }

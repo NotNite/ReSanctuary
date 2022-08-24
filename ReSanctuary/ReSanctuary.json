@@ -2,7 +2,7 @@
   "Author": "NotNite",
   "Name": "ReSanctuary",
   "Punchline": "Improve your Island Sanctuary experience.",
-  "Description": "Improve your Island Sanctuary experience.",
+  "Description": "A plugin to improve Island Sanctuary. Features:\n\n- Mark items to gather on the proper map\n- (planned) Gathering & crafting todo-list, showing you what mats you require\n- (planned) Better inventory view\n- (planned) Widget for quick access to information",
   "InternalName": "ReSanctuary",
   "ApplicableVersion": "any",
   "Tags": [

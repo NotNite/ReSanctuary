@@ -12,8 +12,8 @@ public class ConfigWindow : Window, IDisposable {
                                                  ImGuiWindowFlags.NoScrollbar |
                                                  ImGuiWindowFlags.NoScrollWithMouse;
 
-    public ConfigWindow(Plugin plugin) : base("A Wonderful Configuration Window", WindowFlags) {
-        Size = new Vector2(232, 75);
+    public ConfigWindow(Plugin plugin) : base("ReSanctuary Config", WindowFlags) {
+        Size = new Vector2(300, 75);
         SizeCondition = ImGuiCond.Always;
 
         Configuration = plugin.Configuration;
@@ -22,12 +22,6 @@ public class ConfigWindow : Window, IDisposable {
     public void Dispose() { }
 
     public override void Draw() {
-        // can't ref a property, so use a local copy
-        var configValue = Configuration.SomePropertyToBeSavedAndWithADefault;
-        if (ImGui.Checkbox("Random Config Bool", ref configValue)) {
-            Configuration.SomePropertyToBeSavedAndWithADefault = configValue;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
-            Configuration.Save();
-        }
+        ImGui.Text("There's nothing to configure right now. Sorry! :P");
     }
 }
