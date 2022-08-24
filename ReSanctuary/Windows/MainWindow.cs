@@ -60,7 +60,7 @@ public class MainWindow : Window, IDisposable {
                     var islandSanctuary = teriTypeSheet.First(x => x.Name == "h1m2");
                     var teri = islandSanctuary.RowId;
 
-                    PluginLog.Log("radius: {radius}", item.Radius);
+                    PluginLog.Debug("radius: {radius}", item.Radius);
 
                     Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name);
                 }
