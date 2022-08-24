@@ -2,7 +2,7 @@
 using Dalamud.Plugin;
 using System;
 
-namespace ReSanctuary; 
+namespace ReSanctuary;
 
 [Serializable]
 public class Configuration : IPluginConfiguration {
