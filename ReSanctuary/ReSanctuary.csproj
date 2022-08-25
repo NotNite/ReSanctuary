@@ -27,6 +27,10 @@
 
     <ItemGroup>
         <PackageReference Include="DalamudPackager" Version="2.1.8" />
+        <Reference Include="FFXIVClientStructs">
+            <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
         <Reference Include="Newtonsoft.Json">
             <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
             <Private>false</Private>
@@ -54,7 +58,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj" />
     </ItemGroup>
 
 </Project>
