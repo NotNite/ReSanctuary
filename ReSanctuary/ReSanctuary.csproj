@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Authors>NotNite</Authors>
-        <Version>1.1.0.2</Version>
+        <Version>1.1.0.3</Version>
         <Description>Improve your Island Sanctuary experience.</Description>
         <Copyright>MIT</Copyright>
         <PackageProjectUrl>https://github.com/NotNite/ReSanctuary</PackageProjectUrl>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
@@ -61,13 +62,19 @@ public class WidgetWindow : Window, IDisposable {
 
         ImGui.SameLine();
         
-        if (has >= amount) {
-            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
-            ImGui.Text($"{item.Name} - {has}/{amount}");
-            ImGui.PopStyleColor();
-        } else {
-            ImGui.Text($"{item.Name} - {has}/{amount}");
+        if (has >= amount) ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
+        if (ImGui.Selectable($"{item.Name} - {has}/{amount}")) {
+            var mat = Utils.GetSortedGatheringItems().Find(x => x.ItemID == item.RowId);
+            if (mat != null) {
+                var territoryTypeSheet = Plugin.DataManager.Excel.GetSheet<TerritoryType>();
+                var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
+                var teri = islandSanctuary.RowId;
+
+                Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+            }
         }
+        if (has >= amount) ImGui.PopStyleColor();
+
     }
 
     public override void Draw() {
