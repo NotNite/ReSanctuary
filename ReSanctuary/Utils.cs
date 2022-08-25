@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Dalamud.Game;
 using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.GeneratedSheets;
+using Framework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
 
 namespace ReSanctuary;
@@ -69,5 +70,20 @@ public static class Utils {
         items.Sort((x, y) => x.UIIndex.CompareTo(y.UIIndex));
 
         return items;
+    }
+
+    public static void AddToTodoList(Configuration config, uint id, int amount = 1) {
+        var todoList = config.TodoList;
+        if (!todoList.ContainsKey(id)) todoList[id] = 0;
+        todoList[id] += amount;
+        
+        config.TodoList = todoList;
+        config.Save();
+    }
+
+    public static unsafe int GetStackSize(ulong id) {
+        var pouch = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentMJIPouch();
+        var inventory = pouch->InventoryData->Inventory;
+        return inventory.Get(id).StackSize;
     }
 }

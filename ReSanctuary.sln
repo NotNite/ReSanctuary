@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSanctuary", "ReSanctuary\ReSanctuary.csproj", "{13C812E9-0D42-4B95-8646-40EEBF30636F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs", "FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj", "{EF6BD225-3949-437E-9E71-DCDA2331736A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs.Generators", "FFXIVClientStructs\FFXIVClientStructs.Generators\FFXIVClientStructs.Generators.csproj", "{998FF604-EC42-4349-A954-C9E7DF63625E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -19,6 +23,14 @@ Global
 		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Debug|x64.Build.0 = Debug|x64
 		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Release|x64.ActiveCfg = Release|x64
 		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Release|x64.Build.0 = Release|x64
+		{EF6BD225-3949-437E-9E71-DCDA2331736A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EF6BD225-3949-437E-9E71-DCDA2331736A}.Debug|x64.Build.0 = Debug|Any CPU
+		{EF6BD225-3949-437E-9E71-DCDA2331736A}.Release|x64.ActiveCfg = Release|Any CPU
+		{EF6BD225-3949-437E-9E71-DCDA2331736A}.Release|x64.Build.0 = Release|Any CPU
+		{998FF604-EC42-4349-A954-C9E7DF63625E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{998FF604-EC42-4349-A954-C9E7DF63625E}.Debug|x64.Build.0 = Debug|Any CPU
+		{998FF604-EC42-4349-A954-C9E7DF63625E}.Release|x64.ActiveCfg = Release|Any CPU
+		{998FF604-EC42-4349-A954-C9E7DF63625E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

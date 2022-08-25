@@ -22,6 +22,10 @@ public class ConfigWindow : Window, IDisposable {
     public void Dispose() { }
 
     public override void Draw() {
-        ImGui.Text("There's nothing to configure right now. Sorry! :P");
+        var lockWidget = Configuration.LockWidget;
+        if (ImGui.Checkbox("Lock widget", ref lockWidget)) {
+            Configuration.LockWidget = lockWidget;
+            Configuration.Save();
+        }
     }
 }

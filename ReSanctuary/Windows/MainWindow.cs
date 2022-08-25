@@ -6,6 +6,7 @@ using System.Numerics;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using ImGuiNET;
+using ImGuiScene;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 
@@ -24,6 +25,8 @@ public class MainWindow : Window, IDisposable {
     private ExcelSheet<TerritoryType> territoryTypeSheet;
     private ExcelSheet<Item> itemSheet;
     private RawExcelSheet itemPouchSheet;
+    
+    private Dictionary<uint, TextureWrap> todoTextureCache;
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
         SizeConstraints = new WindowSizeConstraints {
@@ -38,6 +41,8 @@ public class MainWindow : Window, IDisposable {
         territoryTypeSheet = Plugin.DataManager.Excel.GetSheet<TerritoryType>();
         itemSheet = Plugin.DataManager.Excel.GetSheet<Item>();
         itemPouchSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIItemPouch");
+        
+        todoTextureCache = new();
     }
 
     public void Dispose() { }
@@ -77,6 +82,12 @@ public class MainWindow : Window, IDisposable {
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
                     Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name);
+                }
+                
+                ImGui.SameLine();
+
+                if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.ItemID)) { 
+                    Utils.AddToTodoList(Plugin.Configuration, item.RowID - 1);
                 }
 
                 ImGui.TableSetColumnIndex(3);
@@ -131,6 +142,12 @@ public class MainWindow : Window, IDisposable {
             ImGui.SameLine();
 
             ImGui.Text($"{item.Name}\nDuration: {item.CraftingTime} hours");
+            
+            if (ImGui.Button("Add to todo list##ReSanctuary_WorkshopAddTodo_" + item.ItemID)) {
+                foreach (var (requiredMat, matCount) in item.Materials) {
+                    Utils.AddToTodoList(Plugin.Configuration, requiredMat, matCount);
+                }
+            }
 
             ImGui.Text("Materials:");
             foreach (var (requiredMat, matCount) in item.Materials) {
@@ -182,6 +199,50 @@ public class MainWindow : Window, IDisposable {
         }
     }
 
+    private void DrawTodoTab() {
+        var todoList = Plugin.Configuration.TodoList;
+
+        if (ImGui.Button("Open Todo Widget")) {
+            Plugin.WindowSystem.GetWindow("ReSanctuary Widget").IsOpen = true;
+        }
+
+        foreach (var (id, amount) in todoList) {
+            var item = itemSheet.GetRow(itemPouchSheet.GetRow(id).ReadColumn<uint>(0));
+            var amnt = amount;
+
+            TextureWrap? icon;
+            if (todoTextureCache.ContainsKey(id)) {
+               icon = todoTextureCache[id]; 
+            } else {
+                icon = Plugin.DataManager.GetImGuiTextureIcon(item.Icon);
+                todoTextureCache[id] = icon;
+            }
+            
+            var iconSize = ImGui.GetTextLineHeight() * 1.25f;
+            var iconSizeVec = new Vector2(iconSize, iconSize);
+            ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            
+            ImGui.SameLine();
+            ImGui.Text(item.Name);
+            ImGui.SameLine();
+            
+            ImGui.PushItemWidth(100);
+            ImGui.InputInt($"##ReSanctuary_TodoList_{id}", ref amnt, 1, 2);
+            ImGui.PopItemWidth();
+
+            if (amnt != amount) {
+                if (amnt > 0) {
+                    todoList[id] = amnt;
+                } else {
+                    todoList.Remove(id);
+                }
+                
+                Plugin.Configuration.TodoList = todoList;
+                Plugin.Configuration.Save();
+            }
+        }
+    }
+
     private void DrawAboutTab() {
         ImGui.Text("ReSanctuary, made by NotNite.");
         ImGui.Text("If you like my work, please consider supporting me financially via GitHub Sponsors!");
@@ -210,6 +271,11 @@ public class MainWindow : Window, IDisposable {
 
             if (ImGui.BeginTabItem("Workshop")) {
                 DrawWorkshopTab();
+                ImGui.EndTabItem();
+            }
+
+            if (ImGui.BeginTabItem("Todo")) {
+                DrawTodoTab();
                 ImGui.EndTabItem();
             }
 
