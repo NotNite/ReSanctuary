@@ -47,6 +47,7 @@ public sealed class Plugin : IDalamudPlugin {
 
     private void OnCommand(string command, string args) {
         switch (args) {
+            case "settings":
             case "config":
                 DrawConfigUI();
                 break;

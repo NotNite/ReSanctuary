@@ -66,7 +66,7 @@ public class WidgetWindow : Window, IDisposable {
 
             ImGui.SameLine();
 
-            var has = Utils.GetStackSize(id);
+            var has = Utils.GetStackSize(item.RowId);
             if (has >= amount) {
                 ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
                 ImGui.Text($"{item.Name} - {has}/{amount}");

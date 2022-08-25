@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Dalamud.Game;
 using Dalamud.Logging;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.GeneratedSheets;
 using Framework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
@@ -81,9 +82,7 @@ public static class Utils {
         config.Save();
     }
 
-    public static unsafe int GetStackSize(ulong id) {
-        var pouch = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentMJIPouch();
-        var inventory = pouch->InventoryData->Inventory;
-        return inventory.Get(id).StackSize;
+    public static unsafe int GetStackSize(uint id) {
+        return InventoryManager.Instance()->GetInventoryItemCount(id);
     }
 }
