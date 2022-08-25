@@ -156,22 +156,13 @@ public class MainWindow : Window, IDisposable {
 
             ImGui.Text("Materials:");
             foreach (var (requiredMat, matCount) in item.Materials) {
-                var mat = gatheringItems.Find(x => x.RowID == requiredMat + 1);
-
-                var name = string.Empty;
-                
                 var itemPouchRow = itemPouchSheet.GetRow(requiredMat);
                 var itemPouchItemID = itemPouchRow.ReadColumn<uint>(0);
                 var itemPouchItem = itemSheet.GetRow(itemPouchItemID);
                 
-                if (mat != null && mat.Name.Trim() != "") {
-                    name = mat.Name;
-                } else {
-                    // this means it's not a gathering item, probably a mob drop or gardening   
-                    // we'll just fetch the name from the sheet
-                    name = itemPouchItem.Name;
-                }
+                var mat = gatheringItems.Find(x => x.ItemID == itemPouchItemID);
 
+                var name = itemPouchItem.Name;
                 var text = $"{name} x{matCount}";
 
                 if (ImGui.TreeNode(text)) {

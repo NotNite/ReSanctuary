@@ -4,6 +4,7 @@
   "Punchline": "Improve your Island Sanctuary experience.",
   "Description": "A plugin to improve Island Sanctuary. Features:\n\n- Mark items to gather on the proper map\n- Gathering & crafting todo-list, showing you what mats you require\n- (planned) Better inventory view\n- Widget for quick access to information\n\nIcon from the Mutant Standard project.",
   "InternalName": "ReSanctuary",
+  "RepoUrl": "https://github.com/NotNite/ReSanctuary",
   "ApplicableVersion": "any",
   "Tags": [
     "island",

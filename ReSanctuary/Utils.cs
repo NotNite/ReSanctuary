@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using Dalamud.Game;
 using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.GeneratedSheets;
-using Framework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
 
 namespace ReSanctuary;
