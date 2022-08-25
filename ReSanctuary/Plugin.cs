@@ -22,9 +22,6 @@ public sealed class Plugin : IDalamudPlugin {
     public WindowSystem WindowSystem = new("ReSanctuary");
 
     public Plugin() {
-        FFXIVClientStructs.Resolver.Initialize(SigScanner.SearchBase,
-            new FileInfo(Path.Combine(PluginInterface.GetPluginConfigDirectory(), "sigCache.json")));
-
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize(PluginInterface);
 
