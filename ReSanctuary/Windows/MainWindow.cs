@@ -137,21 +137,28 @@ public class MainWindow : Window, IDisposable {
                 var mat = gatheringItems.Find(x => x.RowID == requiredMat + 1);
 
                 var name = string.Empty;
+                
+                var itemPouchRow = itemPouchSheet.GetRow(requiredMat);
+                var itemPouchItemID = itemPouchRow.ReadColumn<uint>(0);
+                var itemPouchItem = itemSheet.GetRow(itemPouchItemID);
+                
                 if (mat != null && mat.Name.Trim() != "") {
                     name = mat.Name;
                 } else {
                     // this means it's not a gathering item, probably a mob drop or gardening   
-                    // we'll just fetch the name from the sheet since we don't need any other data
-                    var itemPouchRow = itemPouchSheet.GetRow(requiredMat);
-                    var itemPouchItemID = itemPouchRow.ReadColumn<uint>(0);
-                    var itemPouchItem = itemSheet.GetRow(itemPouchItemID);
-
+                    // we'll just fetch the name from the sheet
                     name = itemPouchItem.Name;
                 }
 
                 var text = $"{name} x{matCount}";
-                if (mat != null) {
-                    if (ImGui.TreeNode(text)) {
+
+                if (ImGui.TreeNode(text)) {
+                    var matIconSize = ImGui.GetTextLineHeight() * 2;
+                    var matIconSizeVec = new Vector2(matIconSize, matIconSize);
+
+                    if (mat != null) {
+                        ImGui.Image(mat.Icon.ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.SameLine();
                         ImGui.Text($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
 
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemID)) {
@@ -160,14 +167,17 @@ public class MainWindow : Window, IDisposable {
 
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
-
-                        ImGui.TreePop();
+                    } else {
+                        var texture = Plugin.DataManager.GetImGuiTextureIcon(itemPouchItem.Icon);
+                        ImGui.Image(texture.ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.SameLine();
+                        ImGui.Text("No data available :(");
                     }
-                } else {
-                    ImGui.Text(text);
+
+                    ImGui.TreePop();
                 }
             }
-
+            
             ImGui.EndChild();
         }
     }
