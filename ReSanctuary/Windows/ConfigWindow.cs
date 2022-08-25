@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 
@@ -13,7 +14,7 @@ public class ConfigWindow : Window, IDisposable {
                                                  ImGuiWindowFlags.NoScrollWithMouse;
 
     public ConfigWindow(Plugin plugin) : base("ReSanctuary Config", WindowFlags) {
-        Size = new Vector2(300, 75);
+        Size = new Vector2(300, 75) * ImGuiHelpers.GlobalScale;
         SizeCondition = ImGuiCond.Always;
 
         Configuration = plugin.Configuration;

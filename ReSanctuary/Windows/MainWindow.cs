@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using ImGuiNET;
@@ -30,9 +31,11 @@ public class MainWindow : Window, IDisposable {
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
         SizeConstraints = new WindowSizeConstraints {
-            MinimumSize = new Vector2(300, 300),
+            MinimumSize = new Vector2(300, 300) * ImGuiHelpers.GlobalScale,
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
+        Size = new Vector2(600, 400);
+        SizeCondition = ImGuiCond.FirstUseEver;
 
         Plugin = plugin;
         gatheringItems = Utils.GetSortedGatheringItems();
@@ -102,8 +105,8 @@ public class MainWindow : Window, IDisposable {
         var contentRegionAvail = ImGui.GetContentRegionAvail();
 
         {
-            var deez = Math.Min(contentRegionAvail.X * 0.25, 200);
-            var childSize = contentRegionAvail with { X = (float)deez };
+            var imguiSucks = ImGui.CalcTextSize("Isleworks ImGui Sucks Dickballs Lmao").X;
+            var childSize = contentRegionAvail with { X = imguiSucks };
             ImGui.BeginChild("ReSanctuary_WorkshopListSearchChild", childSize);
 
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
@@ -147,6 +150,8 @@ public class MainWindow : Window, IDisposable {
                 foreach (var (requiredMat, matCount) in item.Materials) {
                     Utils.AddToTodoList(Plugin.Configuration, requiredMat, matCount);
                 }
+                
+                Plugin.WindowSystem.GetWindow("ReSanctuary Widget").IsOpen = true;
             }
 
             ImGui.Text("Materials:");
@@ -221,16 +226,11 @@ public class MainWindow : Window, IDisposable {
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
             ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
-            
-            ImGui.SameLine();
-            ImGui.Text(item.Name);
-            ImGui.SameLine();
-            
-            ImGui.PushItemWidth(100);
-            ImGui.InputInt($"##ReSanctuary_TodoList_{id}", ref amnt, 1, 2);
-            ImGui.PopItemWidth();
 
-            if (amnt != amount) {
+            ImGui.PushItemWidth(100);
+            ImGui.SameLine();
+            if (ImGui.InputInt($"##ReSanctuary_TodoList_{id}", ref amnt, 1, 2,
+                    ImGuiInputTextFlags.EnterReturnsTrue)) {
                 if (amnt > 0) {
                     todoList[id] = amnt;
                 } else {
@@ -240,6 +240,10 @@ public class MainWindow : Window, IDisposable {
                 Plugin.Configuration.TodoList = todoList;
                 Plugin.Configuration.Save();
             }
+            ImGui.PopItemWidth();
+            
+            ImGui.SameLine();
+            ImGui.Text(item.Name);
         }
     }
 
