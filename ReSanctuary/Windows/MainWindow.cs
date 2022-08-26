@@ -24,9 +24,8 @@ public class MainWindow : Window, IDisposable {
     private int workshopSearchSelected;
 
     private ExcelSheet<TerritoryType> territoryTypeSheet;
-    private ExcelSheet<Item> itemSheet;
-    private RawExcelSheet itemPouchSheet;
-    
+    private ExcelSheet<MJIItemPouch> itemPouchSheet;
+
     private Dictionary<uint, TextureWrap> todoTextureCache;
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
@@ -42,8 +41,7 @@ public class MainWindow : Window, IDisposable {
         workshopItems = Utils.GetSortedWorkshopItems();
 
         territoryTypeSheet = Plugin.DataManager.Excel.GetSheet<TerritoryType>();
-        itemSheet = Plugin.DataManager.Excel.GetSheet<Item>();
-        itemPouchSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIItemPouch");
+        itemPouchSheet = Plugin.DataManager.Excel.GetSheet<MJIItemPouch>();
         
         todoTextureCache = new();
     }
@@ -89,8 +87,13 @@ public class MainWindow : Window, IDisposable {
                 
                 ImGui.SameLine();
 
-                if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.ItemID)) { 
-                    Utils.AddToTodoList(Plugin.Configuration, item.RowID - 1);
+                if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.ItemID)) {
+                    var rowID = itemPouchSheet.First(x => {
+                        var itemValue = x.Item.Value;
+                        if (itemValue == null) return false;
+                        return itemValue.RowId == item.ItemID;
+                    }).RowId;
+                    Utils.AddToTodoList(Plugin.Configuration, rowID);
                 }
 
                 ImGui.TableSetColumnIndex(3);
@@ -157,10 +160,9 @@ public class MainWindow : Window, IDisposable {
             ImGui.Text("Materials:");
             foreach (var (requiredMat, matCount) in item.Materials) {
                 var itemPouchRow = itemPouchSheet.GetRow(requiredMat);
-                var itemPouchItemID = itemPouchRow.ReadColumn<uint>(0);
-                var itemPouchItem = itemSheet.GetRow(itemPouchItemID);
+                var itemPouchItem = itemPouchRow.Item.Value;
                 
-                var mat = gatheringItems.Find(x => x.ItemID == itemPouchItemID);
+                var mat = gatheringItems.Find(x => x.ItemID == itemPouchItem.RowId);
 
                 var name = itemPouchItem.Name;
                 var text = $"{name} x{matCount}";
@@ -178,6 +180,7 @@ public class MainWindow : Window, IDisposable {
                             var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
                             var teri = islandSanctuary.RowId;
 
+                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
                     } else {
@@ -203,7 +206,7 @@ public class MainWindow : Window, IDisposable {
         }
 
         foreach (var (id, amount) in todoList) {
-            var item = itemSheet.GetRow(itemPouchSheet.GetRow(id).ReadColumn<uint>(0));
+            var item = itemPouchSheet.GetRow(id).Item.Value;
             var amnt = amount;
 
             TextureWrap? icon;
@@ -218,7 +221,7 @@ public class MainWindow : Window, IDisposable {
             var iconSizeVec = new Vector2(iconSize, iconSize);
             ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
-            ImGui.PushItemWidth(100);
+            ImGui.PushItemWidth(100 * ImGuiHelpers.GlobalScale);
             ImGui.SameLine();
             if (ImGui.InputInt($"##ReSanctuary_TodoList_{id}", ref amnt, 1, 2,
                     ImGuiInputTextFlags.EnterReturnsTrue)) {
@@ -232,7 +235,15 @@ public class MainWindow : Window, IDisposable {
                 Plugin.Configuration.Save();
             }
             ImGui.PopItemWidth();
-            
+
+            ImGui.SameLine();
+            ImGui.PushFont(UiBuilder.IconFont);
+            var trashIcon = FontAwesomeIcon.Trash.ToIconString();
+            if (ImGui.Button(trashIcon)) {
+                todoList.Remove(id);
+            }
+            ImGui.PopFont();
+
             ImGui.SameLine();
             ImGui.Text(item.Name);
         }
