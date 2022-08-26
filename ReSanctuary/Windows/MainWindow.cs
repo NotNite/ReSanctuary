@@ -239,7 +239,7 @@ public class MainWindow : Window, IDisposable {
             ImGui.SameLine();
             ImGui.PushFont(UiBuilder.IconFont);
             var trashIcon = FontAwesomeIcon.Trash.ToIconString();
-            if (ImGui.Button(trashIcon)) {
+            if (ImGui.Button(trashIcon + $"##ReSanctuary_TodoListTrash_{id}")) {
                 todoList.Remove(id);
             }
             ImGui.PopFont();
