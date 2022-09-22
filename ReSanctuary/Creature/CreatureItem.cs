@@ -34,12 +34,16 @@ public class CreatureItem
     public byte Size;
     public Item? Item1;
     public uint Item1ID;
+    public TextureWrap Item1Icon;
+    public string Item1ShortName;
     public Item? Item2;
     public uint Item2ID;
+    public TextureWrap Item2Icon;
+    public string Item2ShortName;
     public double IngameX;
     public double IngameY;
-    public int MarkerX;
-    public int MarkerY;
+    public float MarkerX;
+    public float MarkerZ;
     public ushort Radius;
 
 }

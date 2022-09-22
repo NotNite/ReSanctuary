@@ -7,27 +7,13 @@ namespace ReSanctuary.Creature
 {
     internal class CreatureData
     {
-        // Created to store the data instead of putting it in other files
-
-        public static List<CreatureItem> AttachCreatureExtraData(List<CreatureItem> data)
-        {
-            foreach (var ci in data)
-            {
-                CreatureExtraData? ed = GetCreatureExtraData(ci.CreatureID);
-                if (ed != null)
-                {
-                    ci.Name = ed.Name;
-                    ci.SpawnStart = ed.SpawnStart;
-                    ci.SpawnEnd = ed.SpawnEnd;
-                    ci.Weather = ed.Weather;
-                    ci.IngameX = ed.IngameX;
-                    ci.IngameY = ed.IngameY;
-                    ci.Radius = ed.Radius;
-                }
-            }
-            return data;
-        }
-
+        // TODO: Adjust to use the weather IDs the IS uses
+        public const uint ISWEATHER_CLEAR = 1;
+        public const uint ISWEATHER_FAIR = 2;
+        public const uint ISWEATHER_CLOUDS = 3;
+        public const uint ISWEATHER_RAIN = 7;
+        public const uint ISWEATHER_SHOWERS = 8;
+        public const uint ISWEATHER_FOG = 4;
 
         public static CreatureExtraData? GetCreatureExtraData(uint CreatureID)
         {
@@ -52,7 +38,7 @@ namespace ReSanctuary.Creature
                         Name = "Ornery Karakul",
                         SpawnStart = 0,
                         SpawnEnd = 0,
-                        Weather = 0,//fair
+                        Weather = ISWEATHER_FAIR,
                         IngameX = 20,
                         IngameY = 23,
                         Radius = 10
@@ -148,7 +134,7 @@ namespace ReSanctuary.Creature
                         Name = "Yellow Coblyn",
                         SpawnStart = 0,
                         SpawnEnd = 0,
-                        Weather = 0,//fog
+                        Weather = ISWEATHER_FOG,
                         IngameX = 27,
                         IngameY = 19,
                         Radius = 10
@@ -220,7 +206,7 @@ namespace ReSanctuary.Creature
                         Name = "Black Chocobo",
                         SpawnStart = 0,
                         SpawnEnd = 0,
-                        Weather = 0,//clear
+                        Weather = ISWEATHER_CLEAR,
                         IngameX = 13,
                         IngameY = 11,
                         Radius = 10
@@ -268,7 +254,7 @@ namespace ReSanctuary.Creature
                         Name = "Grand Buffalo",
                         SpawnStart = 0,
                         SpawnEnd = 0,
-                        Weather = 0,//clouds
+                        Weather = ISWEATHER_CLOUDS,
                         IngameX = 12,
                         IngameY = 17,
                         Radius = 10
@@ -316,7 +302,7 @@ namespace ReSanctuary.Creature
                         Name = "Gold Back",
                         SpawnStart = 0,
                         SpawnEnd = 0,
-                        Weather = 0,//rain
+                        Weather = ISWEATHER_RAIN,
                         IngameX = 31,
                         IngameY = 28,
                         Radius = 10
@@ -328,7 +314,7 @@ namespace ReSanctuary.Creature
                         Name = "Twinklefleece",
                         SpawnStart = 18,
                         SpawnEnd = 21,
-                        Weather = 0,//fog
+                        Weather = ISWEATHER_FOG,
                         IngameX = 22.1,
                         IngameY = 20.8,
                         Radius = 5
@@ -340,7 +326,7 @@ namespace ReSanctuary.Creature
                         Name = "Beachcomb",
                         SpawnStart = 0,
                         SpawnEnd = 3,
-                        Weather = 0,//rain
+                        Weather = ISWEATHER_RAIN,
                         IngameX = 17.8,
                         IngameY = 12.6,
                         Radius = 5
@@ -352,7 +338,7 @@ namespace ReSanctuary.Creature
                         Name = "Paissa",
                         SpawnStart = 12,
                         SpawnEnd = 15,
-                        Weather = 0,//fair
+                        Weather = ISWEATHER_FAIR,
                         IngameX = 24,
                         IngameY = 28,
                         Radius = 10
@@ -364,8 +350,8 @@ namespace ReSanctuary.Creature
                         Name = "Alligator",
                         SpawnStart = 6,
                         SpawnEnd = 9,
-                        Weather = 0,//showers
-                        IngameX = 17,
+                        Weather = ISWEATHER_SHOWERS,
+                        IngameX = 17.7,
                         IngameY = 24,
                         Radius = 10
                     };
@@ -376,7 +362,7 @@ namespace ReSanctuary.Creature
                         Name = "Goobbue",
                         SpawnStart = 9,
                         SpawnEnd = 12,
-                        Weather = 0,//clouds
+                        Weather = ISWEATHER_CLOUDS,
                         IngameX = 33,
                         IngameY = 16,
                         Radius = 10
@@ -387,32 +373,6 @@ namespace ReSanctuary.Creature
 
             return data;
 
-        }
-
-         	
-        //functions ive tried using to work out ingame X/Y to map marker points....
-        private static short ISIngameToMapXPosistion (double ingame)
-        {
-            return (short)ConvertCoordinatesIntoMapPosition(100, -175, ingame);
-        }
-        private static short ISIngameToMapYPosistion(double ingame)
-        {
-            return (short)ConvertCoordinatesIntoMapPosition(100, 138, ingame);
-        }
-
-        private static double TranslateIngameToCoordinates(double scale, double offset, double val)
-        {
-            return val + (offset / scale);
-            
-            val = (val * 50)-25 - (1024 / (scale / 100));
-            return ConvertCoordinatesIntoMapPosition(scale, offset, val);
-
-        }
-        public static double ConvertCoordinatesIntoMapPosition(double scale, double offset, double val)
-        {
-            val = Math.Round(val, 3);
-            val = (val + offset) * scale;
-            return ((41.0 / scale) * ((val + 1024.0) / 2048.0)) + 1;
         }
 
     }
