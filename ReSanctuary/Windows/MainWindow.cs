@@ -217,12 +217,12 @@ public class MainWindow : Window, IDisposable {
 
         if (ImGui.BeginTable("ReSanctuary_MainWindowTable", 6, tableFlags))
         {
-            ImGui.TableSetupColumn("Icon");
+            ImGui.TableSetupColumn("Size/Icon");
             ImGui.TableSetupColumn("Name");
-            ImGui.TableSetupColumn("Map");
-            ImGui.TableSetupColumn("Spawn Limits");
-            ImGui.TableSetupColumn("Item 1");
-            ImGui.TableSetupColumn("Item 2");
+            ImGui.TableSetupColumn("Posistion");
+            ImGui.TableSetupColumn("Spawn Requirements");
+            ImGui.TableSetupColumn("Leaving 1");
+            ImGui.TableSetupColumn("Leaving 2");
 
             ImGui.TableHeadersRow();
 
@@ -237,6 +237,21 @@ public class MainWindow : Window, IDisposable {
                 ImGui.TableNextRow();
 
                 ImGui.TableSetColumnIndex(0);
+                string sizetxt = "";
+                switch (item.Size)
+                {
+                    case 1:
+                        sizetxt = "[S]";
+                        break;
+                    case 2:
+                        sizetxt = "[M]";
+                        break;
+                    case 3:
+                        sizetxt = "[L]";
+                        break;
+                }
+                ImGui.Text(sizetxt);
+                ImGui.SameLine();
                 var icon = item.Icon;
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
@@ -246,7 +261,7 @@ public class MainWindow : Window, IDisposable {
                 ImGui.Text(item.Name);
 
                 ImGui.TableSetColumnIndex(2);
-                ImGui.Text(item.IngameX.ToString() + ", " + item.IngameY.ToString());
+                ImGui.Text(item.IngameX.ToString("F1") + ", " + item.IngameY.ToString("F1"));
                 ImGui.SameLine();
                 ImGui.PushID("ReSanctuary_CreatureMap_" + (int)item.CreatureID);
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt))
