@@ -28,7 +28,6 @@ public class MainWindow : Window, IDisposable {
     private int workshopSearchSelected;
     private string creatureSearchFilter = string.Empty;
 
-    private ExcelSheet<TerritoryType> territoryTypeSheet;
     private ExcelSheet<MJIItemPouch> itemPouchSheet;
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
@@ -46,7 +45,6 @@ public class MainWindow : Window, IDisposable {
 
         weatherList = Utils.GetISWeathers();
 
-        territoryTypeSheet = Plugin.DataManager.Excel.GetSheet<TerritoryType>();
         itemPouchSheet = Plugin.DataManager.Excel.GetSheet<MJIItemPouch>();
         
     }
@@ -81,8 +79,7 @@ public class MainWindow : Window, IDisposable {
 
                 ImGui.TableSetColumnIndex(2);
                 if (ImGui.Button("Show on map##ReSanctuary_ShowOnMap_" + item.ItemID)) {
-                    var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
-                    var teri = islandSanctuary.RowId;
+                    var teri = Plugin.islandSanctuary.RowId;
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
@@ -180,8 +177,7 @@ public class MainWindow : Window, IDisposable {
                         ImGui.Text($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
 
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemID)) {
-                            var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
-                            var teri = islandSanctuary.RowId;
+                            var teri = Plugin.islandSanctuary.RowId;
 
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
@@ -257,8 +253,7 @@ public class MainWindow : Window, IDisposable {
                 ImGui.PushID("ReSanctuary_CreatureMap_" + (int)item.CreatureID);
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt))
                 {
-                    var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
-                    var teri = islandSanctuary.RowId;
+                    var teri = Plugin.islandSanctuary.RowId;
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
