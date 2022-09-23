@@ -21,8 +21,7 @@ public class MainWindow : Window, IDisposable {
     private List<WorkshopItem> workshopItems;
     private List<Creature.CreatureItem> creatureItems;
 
-    private Dictionary<int, Weather> weatherList;
-    private Dictionary<int,TextureWrap> weatherIcons;
+    private Dictionary<uint, Weather> weatherList;
 
     private string gatheringSearchFilter = string.Empty;
     private string workshopSearchFilter = string.Empty;
@@ -31,8 +30,6 @@ public class MainWindow : Window, IDisposable {
 
     private ExcelSheet<TerritoryType> territoryTypeSheet;
     private ExcelSheet<MJIItemPouch> itemPouchSheet;
-
-    private Dictionary<uint, TextureWrap> todoTextureCache;
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
         SizeConstraints = new WindowSizeConstraints {
@@ -48,12 +45,10 @@ public class MainWindow : Window, IDisposable {
         creatureItems = Utils.GetCreatureItems();
 
         weatherList = Utils.GetISWeathers();
-        weatherIcons = Utils.GetWeatherIcons(weatherList);
 
         territoryTypeSheet = Plugin.DataManager.Excel.GetSheet<TerritoryType>();
         itemPouchSheet = Plugin.DataManager.Excel.GetSheet<MJIItemPouch>();
         
-        todoTextureCache = new();
     }
 
     public void Dispose() { }
@@ -77,10 +72,9 @@ public class MainWindow : Window, IDisposable {
                 ImGui.TableNextRow();
 
                 ImGui.TableSetColumnIndex(0);
-                var icon = item.Icon;
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(Utils.IconCache(item.Item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
                 ImGui.TableSetColumnIndex(1);
                 ImGui.Text(item.Name);
@@ -150,10 +144,9 @@ public class MainWindow : Window, IDisposable {
 
             var item = workshopItems[workshopSearchSelected];
 
-            var icon = item.Icon;
             var iconSize = ImGui.GetTextLineHeight() * 2f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            ImGui.Image(Utils.IconCache(item.Item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.SameLine();
 
@@ -182,7 +175,7 @@ public class MainWindow : Window, IDisposable {
                     var matIconSizeVec = new Vector2(matIconSize, matIconSize);
 
                     if (mat != null) {
-                        ImGui.Image(mat.Icon.ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.Image(Utils.IconCache(mat.Item.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.Text($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
 
@@ -194,8 +187,7 @@ public class MainWindow : Window, IDisposable {
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
                     } else {
-                        var texture = Plugin.DataManager.GetImGuiTextureIcon(itemPouchItem.Icon);
-                        ImGui.Image(texture.ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.Image(Utils.IconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.Text("No data available :(");
                     }
@@ -231,7 +223,7 @@ public class MainWindow : Window, IDisposable {
                 if (!item.Name.ToLower().Contains(creatureSearchFilter.ToLower())
                     && !item.Item1.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
                     && !item.Item2.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
-                    && !weatherList[(int)item.Weather].Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
+                    && !weatherList[item.Weather].Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
                     ) continue;
 
                 ImGui.TableNextRow();
@@ -252,10 +244,9 @@ public class MainWindow : Window, IDisposable {
                 }
                 ImGui.Text(sizetxt);
                 ImGui.SameLine();
-                var icon = item.Icon;
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(Utils.IconCache(item.IconID).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
                 ImGui.TableSetColumnIndex(1);
                 ImGui.Text(item.Name);
@@ -280,9 +271,9 @@ public class MainWindow : Window, IDisposable {
                 {
                     var wiconSize = ImGui.GetTextLineHeight() * 1.25f;
                     var wiconSizeVec = new Vector2(wiconSize, wiconSize);
-                    ImGui.Image(weatherIcons[(int)item.Weather].ImGuiHandle, wiconSizeVec, Vector2.Zero, Vector2.One);
+                    ImGui.Image(Utils.IconCache((uint)weatherList[item.Weather].Icon).ImGuiHandle, wiconSizeVec, Vector2.Zero, Vector2.One);
                     ImGui.SameLine();
-                    ImGui.Text(weatherList[(int)item.Weather].Name);
+                    ImGui.Text(weatherList[item.Weather].Name);
                 }
                 if (item.SpawnStart != 0 && item.SpawnEnd != 0)
                 {
@@ -297,7 +288,7 @@ public class MainWindow : Window, IDisposable {
                 //Item 1
                 var i1iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var i1iconSizeVec = new Vector2(i1iconSize, i1iconSize);
-                ImGui.Image(item.Item1Icon.ImGuiHandle, i1iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(Utils.IconCache(item.Item1.Icon).ImGuiHandle, i1iconSizeVec, Vector2.Zero, Vector2.One);
                 ImGui.SameLine();
                 ImGui.Text(item.Item1ShortName);
                 ImGui.SameLine();
@@ -316,7 +307,7 @@ public class MainWindow : Window, IDisposable {
                 //Item 2
                 var i2iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var i2iconSizeVec = new Vector2(i2iconSize, i2iconSize);
-                ImGui.Image(item.Item2Icon.ImGuiHandle, i2iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(Utils.IconCache(item.Item2.Icon).ImGuiHandle, i2iconSizeVec, Vector2.Zero, Vector2.One);
                 ImGui.SameLine(0);
                 ImGui.Text(item.Item2ShortName);
                 ImGui.SameLine();
@@ -352,17 +343,9 @@ public class MainWindow : Window, IDisposable {
             var item = itemPouchSheet.GetRow(id).Item.Value;
             var amnt = amount;
 
-            TextureWrap? icon;
-            if (todoTextureCache.ContainsKey(id)) {
-               icon = todoTextureCache[id]; 
-            } else {
-                icon = Plugin.DataManager.GetImGuiTextureIcon(item.Icon);
-                todoTextureCache[id] = icon;
-            }
-            
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            ImGui.Image(Utils.IconCache(item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.PushItemWidth(100 * ImGuiHelpers.GlobalScale);
             ImGui.SameLine();

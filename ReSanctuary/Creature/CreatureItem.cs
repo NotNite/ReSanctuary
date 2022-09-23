@@ -24,8 +24,7 @@ public class CreatureItem
     public uint CreatureID;
     public byte CreatureType;
     public byte CreatureGroup;
-    public int IconID;
-    public TextureWrap Icon;
+    public uint IconID;
     public uint RowID;
     public uint UIIndex;
     public int SpawnStart;
@@ -34,11 +33,9 @@ public class CreatureItem
     public byte Size;
     public Item? Item1;
     public uint Item1ID;
-    public TextureWrap Item1Icon;
     public string Item1ShortName;
     public Item? Item2;
     public uint Item2ID;
-    public TextureWrap Item2Icon;
     public string Item2ShortName;
     public double IngameX;
     public double IngameY;

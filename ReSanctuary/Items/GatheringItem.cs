@@ -14,7 +14,6 @@ public class GatheringItem : BaseItem {
         Name = item.Name;
         Item = item;
         ItemID = item.RowId;
-        Icon = Plugin.DataManager.GetImGuiTextureIcon(item.Icon);
         RowID = gatheringItem.RowId;
         UIIndex = gatheringItem.ReadColumn<byte>(1);
 

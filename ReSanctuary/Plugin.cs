@@ -21,6 +21,8 @@ public sealed class Plugin : IDalamudPlugin {
     public Configuration Configuration { get; private set; }
     public WindowSystem WindowSystem = new("ReSanctuary");
 
+    public static Dictionary<uint, TextureWrap> iconCache = new();
+
     public Plugin() {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize(PluginInterface);

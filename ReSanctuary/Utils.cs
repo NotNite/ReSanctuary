@@ -1,8 +1,11 @@
+﻿using System;
 ﻿using System.Collections.Generic;
 using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using ImGuiScene;
 using Lumina.Excel.GeneratedSheets;
+using ReSanctuary.Creature;
 using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
 
 namespace ReSanctuary;
@@ -71,6 +74,97 @@ public static class Utils {
         return items;
     }
 
+    public static List<CreatureItem> GetCreatureItems() {
+        var creatureSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIAnimals");
+        var itemSheet = Plugin.DataManager.Excel.GetSheet<Item>();
+
+        var creatures = new List<CreatureItem>();
+        var enumerator = creatureSheet.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var current = enumerator.Current;
+            var creatureID = current.ReadColumn<uint>(0);
+            if (creatureID > 0)
+            {
+                var ci = new CreatureItem();
+
+                ci.CreatureID = creatureID;
+                ci.IconID = (uint)current.ReadColumn<int>(6);
+                ci.UIIndex = current.RowId;
+                ci.Size = current.ReadColumn<byte>(1);
+                ci.CreatureType = current.ReadColumn<byte>(2);
+                ci.CreatureGroup = current.ReadColumn<byte>(3);
+                ci.Item1ID = current.ReadColumn<uint>(4);
+                ci.Item1 = itemSheet.GetRow(ci.Item1ID);
+                ci.Item1ShortName = ci.Item1.Name.RawString.Replace("Sanctuary ", "");
+                ci.Item2ID = current.ReadColumn<uint>(5);
+                ci.Item2 = itemSheet.GetRow(ci.Item2ID);
+                ci.Item2ShortName = ci.Item2.Name.RawString.Replace("Sanctuary ", "");
+
+                CreatureExtraData? ed = CreatureData.GetCreatureExtraData(ci.CreatureID);
+                if (ed != null)
+                {
+                    ci.Name = ed.Name;
+                    ci.SpawnStart = ed.SpawnStart;
+                    ci.SpawnEnd = ed.SpawnEnd;
+                    ci.Weather = ed.Weather;
+                    ci.IngameX = ed.IngameX;
+                    ci.IngameY = ed.IngameY;
+                    ci.Radius = ed.Radius;
+                }
+
+                ci.MarkerX = Utils.ConvertMapCoordToWorldCoordXZ((float)ci.IngameX, 100, -175);
+                ci.MarkerZ = Utils.ConvertMapCoordToWorldCoordXZ((float)ci.IngameY, 100, 138);
+
+                creatures.Add(ci);
+            }
+            
+        }
+
+        creatures.Sort((x, y) => x.UIIndex.CompareTo(y.UIIndex));
+
+        return creatures;
+    }
+
+    public static Dictionary<uint,Weather> GetISWeathers()
+    {
+        Dictionary<uint, Weather> list = new Dictionary<uint, Weather>();
+        List<uint> weathers = new List<uint> {0,1,2,3,4,7,8};
+
+        var weatherSheet = Plugin.DataManager.Excel.GetSheet<Weather>();
+
+        foreach (uint item in weathers)
+        {
+            var weatherRow = weatherSheet.GetRow((uint)item);
+            list.Add(item, weatherRow);
+            IconCachePreload((uint)weatherRow.Icon);
+        }
+
+        return list;
+
+    }
+
+    public static void IconCachePreload(uint iconID)
+    {
+        if (!Plugin.iconCache.ContainsKey(iconID))
+        {
+            //PluginLog.Debug("Add iconID " + iconID + " to IconCache");
+            var icon = Plugin.DataManager.GetImGuiTextureIcon(iconID);
+            Plugin.iconCache[iconID] = icon;
+        }
+        return;
+    }
+
+    public static TextureWrap IconCache(uint iconID)
+    {
+        // Ensure icon is loaded
+        IconCachePreload(iconID);
+        // Return icon
+        return Plugin.iconCache[iconID];
+
+    }
+
+
     public static void AddToTodoList(Configuration config, uint id, int amount = 1) {
         var todoList = config.TodoList;
         if (!todoList.ContainsKey(id)) todoList[id] = 0;
@@ -83,4 +177,29 @@ public static class Utils {
     public static unsafe int GetStackSize(uint id) {
         return InventoryManager.Instance()->GetInventoryItemCount(id);
     }
+    public static string Format24HourAsAmPm(int hour)
+    {
+        var ampm = "am";
+        if (hour >= 12)
+        {
+            ampm = "pm";
+            hour -= 12;
+        }
+        if (hour == 0) { hour = 12; }
+
+        return hour.ToString() + ampm;
+    }
+
+    //Copied from Dalamud.Utility.MapUtil
+    public static float ConvertWorldCoordXZToMapCoord(float value, uint scale, int offset)
+    {
+        return 0.02f * (float)offset + 2048f / (float)scale + 0.02f * value + 1f;
+    }
+
+    public static float ConvertMapCoordToWorldCoordXZ(float value, uint scale, int offset)
+    {
+        return (value - (0.02f * (float)offset) - (2048f / (float)scale) - 1f) /0.02f ;
+
+    }
+
 }
