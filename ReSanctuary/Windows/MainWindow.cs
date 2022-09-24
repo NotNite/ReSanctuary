@@ -28,10 +28,6 @@ public class MainWindow : Window, IDisposable {
     private int workshopSearchSelected;
     private string creatureSearchFilter = string.Empty;
 
-    private string testX = string.Empty;
-    private string testY = string.Empty;
-    private string testR = string.Empty;
-
     private ExcelSheet<MJIItemPouch> itemPouchSheet;
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
@@ -328,13 +324,6 @@ public class MainWindow : Window, IDisposable {
             ImGui.EndTable();
         }
 
-
-    }
-
-    public void DrawCreatureSpawnTab()
-    {
-        ImGui.Text("This will show a list of upcoming spawns.");
-
     }
 
     private void DrawTodoTab() {
@@ -399,51 +388,6 @@ public class MainWindow : Window, IDisposable {
             });
     }
 
-    private void DrawTestTab()
-    {
-        ImGui.Text("ReSanctuary, edited by Cy.");
-        ImGui.Text("Testing on this page!");
-        ImGui.Text("Current time is " + DateTime.Now.ToShortTimeString());
-        ImGui.Text("Current time is " + DateTime.Now.ToFileTimeUtc());
-
-        ImGui.Text("");
-
-        var teri = Plugin.islandSanctuary.RowId;
-
-        ImGui.Text("TerritoryID for IS = " + teri);
-
-        ImGui.Text("Weather 1 is " + weatherList[1].Name);
-        ImGui.Text("Weather 1 icon id " + weatherList[1].Icon);
-
-        ImGui.Text("");
-
-        ImGui.SetNextItemWidth(50);
-        ImGui.InputText("Map X   ", ref testX, 10);
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(50);
-        ImGui.InputText("Map Y   ", ref testY, 10);
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(50);
-        ImGui.InputText("Map Radius", ref testR, 10);
-        
-        if (ImGui.Button("Show on map##ReSanctuary_ShowOnMap_TestTabButton"))
-        {
-            //get vars, parse to double
-            double ingX, ingY;
-            int ingR;
-            if (Double.TryParse(testX, out ingX) && Double.TryParse(testY, out ingY) && Int32.TryParse(testR, out ingR))
-            {
-                float markerX, markerZ;
-                markerX = Utils.ConvertMapCoordToWorldCoordXZ((float)ingX, 100, -175);
-                markerZ = Utils.ConvertMapCoordToWorldCoordXZ((float)ingY, 100, 138);
-
-                Utils.OpenGatheringMarker(teri, (int)markerX, (int)markerZ, ingR, "Test Location");
-            }
-        }
-
-
-    }
-
     public override void Draw() {
         if (ImGui.BeginTabBar("##ReSanctuary_MainWindowTabs", ImGuiTabBarFlags.None)) {
             if (ImGui.BeginTabItem("Gathering")) {
@@ -462,12 +406,6 @@ public class MainWindow : Window, IDisposable {
                 ImGui.EndTabItem();
             }
 
-            //if (ImGui.BeginTabItem("Spawns"))
-            //{
-            //    DrawCreatureSpawnTab();
-            //    ImGui.EndTabItem();
-            //}
-
             if (ImGui.BeginTabItem("Todo")) {
                 DrawTodoTab();
                 ImGui.EndTabItem();
@@ -478,11 +416,6 @@ public class MainWindow : Window, IDisposable {
                 ImGui.EndTabItem();
             }
 
-            if (ImGui.BeginTabItem("Test"))
-            {
-                DrawTestTab();
-                ImGui.EndTabItem();
-            }
 
         }
     }
