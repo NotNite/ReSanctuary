@@ -1,5 +1,5 @@
 ﻿using System;
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -177,6 +177,12 @@ public static class Utils {
     public static unsafe int GetStackSize(uint id) {
         return InventoryManager.Instance()->GetInventoryItemCount(id);
     }
+
+    public static DateTime GetNextCreatureSpawn(uint id) {
+        // calculate next spawn time. for now returns now+1234 seconds
+        return DateTime.Now.AddSeconds(1234);
+    }
+
     public static string Format24HourAsAmPm(int hour)
     {
         var ampm = "am";
