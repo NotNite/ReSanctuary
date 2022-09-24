@@ -209,8 +209,8 @@ public class MainWindow : Window, IDisposable {
             ImGui.TableSetupColumn("Name");
             ImGui.TableSetupColumn("Posistion");
             ImGui.TableSetupColumn("Spawn Requirements");
-            ImGui.TableSetupColumn("Leaving 1");
-            ImGui.TableSetupColumn("Leaving 2");
+            ImGui.TableSetupColumn("Guaranteed Leaving");
+            ImGui.TableSetupColumn("Chance of Leaving");
 
             ImGui.TableHeadersRow();
 
