@@ -298,12 +298,12 @@ namespace ReSanctuary.Creature
                 case 14929:
                     data = new CreatureExtraData
                     {
-                        Name = "Gold Back",//ToCheck
+                        Name = "Gold Back",
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_RAIN,
-                        IngameX = 31,
-                        IngameY = 28,
+                        IngameX = 31.2,
+                        IngameY = 28.6,
                         Radius = 10
                     };
                     break;
@@ -322,13 +322,13 @@ namespace ReSanctuary.Creature
                 case 14931:
                     data = new CreatureExtraData
                     {
-                        Name = "Beachcomb",//ToConfirm
+                        Name = "Beachcomb",
                         SpawnStart = 0,
                         SpawnEnd = 3,
                         Weather = ISWEATHER_RAIN,
-                        IngameX = 17.9,
+                        IngameX = 18,
                         IngameY = 12.7,
-                        Radius = 11
+                        Radius = 9
                     };
                     break;
                 case 14932:
