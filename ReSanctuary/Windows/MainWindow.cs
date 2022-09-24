@@ -270,7 +270,7 @@ public class MainWindow : Window, IDisposable {
                     ImGui.SameLine();
                     ImGui.Text(weatherList[item.Weather].Name);
                 }
-                if (item.SpawnStart != 0 && item.SpawnEnd != 0)
+                if (item.SpawnStart != 0 || item.SpawnEnd != 0)
                 {
                     if (item.Weather !=0)
                     {
