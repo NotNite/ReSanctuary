@@ -106,12 +106,12 @@ namespace ReSanctuary.Creature
                 case 14913:
                     data = new CreatureExtraData
                     {
-                        Name = "Star Marmot",//ToCheck
+                        Name = "Star Marmot",
                         SpawnStart = 9,
                         SpawnEnd = 12,
                         Weather = 0,
-                        IngameX = 15,
-                        IngameY = 19,
+                        IngameX = 15.7,
+                        IngameY = 19.5,
                         Radius = 10
                     };
                     break;
@@ -130,7 +130,7 @@ namespace ReSanctuary.Creature
                 case 14915:
                     data = new CreatureExtraData
                     {
-                        Name = "Yellow Coblyn",
+                        Name = "Yellow Coblyn",//ToConfirm
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_FOG,
@@ -286,13 +286,13 @@ namespace ReSanctuary.Creature
                 case 14928:
                     data = new CreatureExtraData
                     {
-                        Name = "Blue Back",//ToCheck
+                        Name = "Blue Back",
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 28,
-                        IngameY = 28,
-                        Radius = 30
+                        IngameX = 27.4,
+                        IngameY = 29.5,
+                        Radius = 116
                     };
                     break;
                 case 14929:
@@ -322,13 +322,13 @@ namespace ReSanctuary.Creature
                 case 14931:
                     data = new CreatureExtraData
                     {
-                        Name = "Beachcomb",//ToCheck
+                        Name = "Beachcomb",//ToConfirm
                         SpawnStart = 0,
                         SpawnEnd = 3,
                         Weather = ISWEATHER_RAIN,
-                        IngameX = 17.8,
-                        IngameY = 12.6,
-                        Radius = 5
+                        IngameX = 17.9,
+                        IngameY = 12.7,
+                        Radius = 11
                     };
                     break;
                 case 14932:
@@ -338,9 +338,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 12,
                         SpawnEnd = 15,
                         Weather = ISWEATHER_FAIR,
-                        IngameX = 24.8,
-                        IngameY = 28.3,
-                        Radius = 15
+                        IngameX = 24.9,
+                        IngameY = 28.4,
+                        Radius = 9
                     };
                     break;
                 case 14933:
