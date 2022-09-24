@@ -7,7 +7,6 @@ namespace ReSanctuary.Creature
 {
     internal class CreatureData
     {
-        // TODO: Adjust to use the weather IDs the IS uses
         public const uint ISWEATHER_CLEAR = 1;
         public const uint ISWEATHER_FAIR = 2;
         public const uint ISWEATHER_CLOUDS = 3;
@@ -27,9 +26,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 20,
-                        IngameY = 23,
-                        Radius = 30
+                        IngameX = 20.6,
+                        IngameY = 23.3,
+                        Radius = 35
                     };
                     break;
                 case 14907:
@@ -39,9 +38,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_FAIR,
-                        IngameX = 20,
-                        IngameY = 23,
-                        Radius = 10
+                        IngameX = 20.6,
+                        IngameY = 23.3,
+                        Radius = 7
                     };
                     break;
                 case 14908:
@@ -51,9 +50,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 20,
-                        IngameY = 26,
-                        Radius = 30
+                        IngameX = 20.2,
+                        IngameY = 25.5,
+                        Radius = 47
                     };
                     break;
                 case 14909:
@@ -63,9 +62,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 6,
                         SpawnEnd = 9,
                         Weather = 0,
-                        IngameX = 20,
-                        IngameY = 26,
-                        Radius = 10
+                        IngameX = 20.3,
+                        IngameY = 26.5,
+                        Radius = 8
                     };
                     break;
                 case 14910:
@@ -75,9 +74,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 19,
-                        IngameY = 11,
-                        Radius = 30
+                        IngameX = 16.2,
+                        IngameY = 11.9,
+                        Radius = 140
                     };
                     break;
                 case 14911:
@@ -87,9 +86,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 12,
                         SpawnEnd = 15,
                         Weather = 0,
-                        IngameX = 19,
-                        IngameY = 11,
-                        Radius = 10
+                        IngameX = 19.1,
+                        IngameY = 11.8,
+                        Radius = 7
                     };
                     break;
                 case 14912:
@@ -99,9 +98,9 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 15,
-                        IngameY = 19,
-                        Radius = 30
+                        IngameX = 15.9,
+                        IngameY = 18.6,
+                        Radius = 46
                     };
                     break;
                 case 14913:
@@ -111,7 +110,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 9,
                         SpawnEnd = 12,
                         Weather = 0,
-                        IngameX = 15,
+                        IngameX = 15,//Todo
                         IngameY = 19,
                         Radius = 10
                     };
@@ -123,7 +122,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 20,
+                        IngameX = 20,//Todo
                         IngameY = 13,
                         Radius = 40
                     };
@@ -135,7 +134,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_FOG,
-                        IngameX = 27,
+                        IngameX = 27,//Todo
                         IngameY = 19,
                         Radius = 10
                     };
@@ -147,7 +146,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 16,
+                        IngameX = 16,//Todo
                         IngameY = 12,
                         Radius = 30
                     };
@@ -159,7 +158,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 15,
                         SpawnEnd = 18,
                         Weather = 0,
-                        IngameX = 16,
+                        IngameX = 16,//Todo
                         IngameY = 12,
                         Radius = 10
                     };
@@ -171,7 +170,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 21,
+                        IngameX = 21,//Todo
                         IngameY = 19,
                         Radius = 40
                     };
@@ -183,7 +182,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 18,
                         SpawnEnd = 21,
                         Weather = 0,
-                        IngameX = 20,
+                        IngameX = 20,//Todo
                         IngameY = 19,
                         Radius = 10
                     };
@@ -195,7 +194,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 20,
+                        IngameX = 20,//Todo
                         IngameY = 21,
                         Radius = 30
                     };
@@ -207,7 +206,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_CLEAR,
-                        IngameX = 13,
+                        IngameX = 13,//Todo
                         IngameY = 11,
                         Radius = 10
                     };
@@ -219,7 +218,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 30,
+                        IngameX = 30,//Todo
                         IngameY = 11,
                         Radius = 40
                     };
@@ -231,7 +230,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 3,
                         Weather = 0,
-                        IngameX = 31,
+                        IngameX = 31,//Todo
                         IngameY = 11,
                         Radius = 10
                     };
@@ -243,7 +242,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 12,
+                        IngameX = 12,//Todo
                         IngameY = 17,
                         Radius = 30
                     };
@@ -255,7 +254,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_CLOUDS,
-                        IngameX = 12,
+                        IngameX = 12,//Todo
                         IngameY = 17,
                         Radius = 10
                     };
@@ -267,7 +266,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 26,
+                        IngameX = 26,//Todo
                         IngameY = 24,
                         Radius = 40
                     };
@@ -279,7 +278,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 3,
                         SpawnEnd = 6,
                         Weather = 0,
-                        IngameX = 26,
+                        IngameX = 26,//Todo
                         IngameY = 22,
                         Radius = 10
                     };
@@ -291,7 +290,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = 0,
-                        IngameX = 28,
+                        IngameX = 28,//Todo
                         IngameY = 28,
                         Radius = 30
                     };
@@ -303,7 +302,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_RAIN,
-                        IngameX = 31,
+                        IngameX = 31,//Todo
                         IngameY = 28,
                         Radius = 10
                     };
@@ -315,7 +314,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 18,
                         SpawnEnd = 21,
                         Weather = ISWEATHER_FOG,
-                        IngameX = 22.1,
+                        IngameX = 22.1,//Todo
                         IngameY = 20.8,
                         Radius = 5
                     };
@@ -327,7 +326,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 0,
                         SpawnEnd = 3,
                         Weather = ISWEATHER_RAIN,
-                        IngameX = 17.8,
+                        IngameX = 17.8,//Todo
                         IngameY = 12.6,
                         Radius = 5
                     };
@@ -339,7 +338,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 12,
                         SpawnEnd = 15,
                         Weather = ISWEATHER_FAIR,
-                        IngameX = 24,
+                        IngameX = 24,//Todo
                         IngameY = 28,
                         Radius = 10
                     };
@@ -352,8 +351,8 @@ namespace ReSanctuary.Creature
                         SpawnEnd = 9,
                         Weather = ISWEATHER_SHOWERS,
                         IngameX = 17.7,
-                        IngameY = 24,
-                        Radius = 10
+                        IngameY = 24.1,
+                        Radius = 11
                     };
                     break;
                 case 14934:
@@ -363,7 +362,7 @@ namespace ReSanctuary.Creature
                         SpawnStart = 9,
                         SpawnEnd = 12,
                         Weather = ISWEATHER_CLOUDS,
-                        IngameX = 33,
+                        IngameX = 33,//Todo
                         IngameY = 16,
                         Radius = 10
                     };
