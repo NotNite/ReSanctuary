@@ -178,11 +178,6 @@ public static class Utils {
         return InventoryManager.Instance()->GetInventoryItemCount(id);
     }
 
-    public static DateTime GetNextCreatureSpawn(uint id) {
-        // calculate next spawn time. for now returns now+1234 seconds
-        return DateTime.Now.AddSeconds(1234);
-    }
-
     public static string Format24HourAsAmPm(int hour)
     {
         var ampm = "am";
