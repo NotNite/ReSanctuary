@@ -130,13 +130,13 @@ namespace ReSanctuary.Creature
                 case 14915:
                     data = new CreatureExtraData
                     {
-                        Name = "Yellow Coblyn",//ToConfirm
+                        Name = "Yellow Coblyn",
                         SpawnStart = 0,
                         SpawnEnd = 0,
                         Weather = ISWEATHER_FOG,
-                        IngameX = 26.8,
+                        IngameX = 26.9,
                         IngameY = 19.4,
-                        Radius = 10
+                        Radius = 8
                     };
                     break;
                 case 14916:
