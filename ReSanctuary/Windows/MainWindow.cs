@@ -20,6 +20,7 @@ public class MainWindow : Window, IDisposable {
     private List<GatheringItem> gatheringItems;
     private List<WorkshopItem> workshopItems;
     private List<Creature.CreatureItem> creatureItems;
+    private Dictionary<uint,string> creatureItemDrops;
 
     private Dictionary<uint, Weather> weatherList;
 
@@ -42,6 +43,7 @@ public class MainWindow : Window, IDisposable {
         gatheringItems = Utils.GetSortedGatheringItems();
         workshopItems = Utils.GetSortedWorkshopItems();
         creatureItems = Utils.GetCreatureItems();
+        creatureItemDrops = Utils.SeperateCreatureDrops(creatureItems);
 
         weatherList = Utils.GetISWeathers();
         
@@ -185,7 +187,15 @@ public class MainWindow : Window, IDisposable {
                     } else {
                         ImGui.Image(Utils.IconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
+                        if (creatureItemDrops.ContainsKey(itemPouchItem.RowId))
+                        {
+                            ImGui.TextWrapped("Drops from: " + string.Join(", ",Utils.FindDropOnCreatures(itemPouchItem.RowId, creatureItems)));
+                        }
+                        //Last logic is checking crops.
+                        else 
+                        {
                         ImGui.Text("No data available :(");
+                    }
                     }
 
                     ImGui.TreePop();
