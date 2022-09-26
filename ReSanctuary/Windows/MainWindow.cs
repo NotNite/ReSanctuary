@@ -67,7 +67,10 @@ public class MainWindow : Window, IDisposable {
             ImGui.TableHeadersRow();
 
             foreach (var item in gatheringItems) {
-                if (!item.Name.ToLower().Contains(gatheringSearchFilter.ToLower())) continue;
+                var reqToolString = item.RequiredTool != null ? item.RequiredTool.Name : "None";
+
+                if (!item.Name.ToLower().Contains(gatheringSearchFilter.ToLower()) 
+                    && !reqToolString.ToString().ToLower().Contains(gatheringSearchFilter.ToLower())) continue;
 
                 ImGui.TableNextRow();
 
@@ -100,7 +103,7 @@ public class MainWindow : Window, IDisposable {
                 }
 
                 ImGui.TableSetColumnIndex(3);
-                ImGui.Text(item.RequiredTool != null ? item.RequiredTool.Name : "None");
+                ImGui.Text(reqToolString);
             }
 
             ImGui.EndTable();
