@@ -176,13 +176,13 @@ public class MainWindow : Window, IDisposable {
                     if (mat != null) {
                         ImGui.Image(Utils.IconCache(mat.Item.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
-                        ImGui.Text($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
+                        ImGui.TextWrapped($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
 
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemID)) {
                             var teri = Plugin.islandSanctuary.RowId;
 
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
-                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+                            //Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
                     } else {
                         ImGui.Image(Utils.IconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
@@ -194,7 +194,7 @@ public class MainWindow : Window, IDisposable {
                         //Last logic is checking crops.
                         else 
                         {
-                        ImGui.Text("No data available :(");
+                            ImGui.TextWrapped("No data available :(");
                     }
                     }
 

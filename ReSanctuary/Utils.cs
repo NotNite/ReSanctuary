@@ -126,6 +126,28 @@ public static class Utils {
         return creatures;
     }
 
+    public static Dictionary<uint, string> SeperateCreatureDrops(List<CreatureItem> creatures)
+    {
+        Dictionary<uint, string> drops = new Dictionary<uint, string>();
+        foreach (CreatureItem item in creatures)
+        {
+            drops.TryAdd(item.Item1ID, item.Item1.Name);
+            drops.TryAdd(item.Item2ID, item.Item2.Name);
+        }
+        return drops;
+    }
+
+    public static List<string> FindDropOnCreatures(uint itemid, List<CreatureItem> creatures)
+    {
+        List<string> droplist = new List<string>();
+        foreach (CreatureItem item in creatures)
+        {
+            if (item.Item1ID == itemid || item.Item2ID == itemid)
+            { droplist.Add(item.Name); }
+        }
+        return droplist;
+    }
+
     public static Dictionary<uint,Weather> GetISWeathers()
     {
         Dictionary<uint, Weather> list = new Dictionary<uint, Weather>();
