@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Interface;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using ImGuiNET;
@@ -18,15 +19,17 @@ public class MainWindow : Window, IDisposable {
 
     private List<GatheringItem> gatheringItems;
     private List<WorkshopItem> workshopItems;
+    private List<Creature.CreatureItem> creatureItems;
+    private Dictionary<uint,string> creatureItemDrops;
+
+    private Dictionary<uint, Weather> weatherList;
 
     private string gatheringSearchFilter = string.Empty;
     private string workshopSearchFilter = string.Empty;
     private int workshopSearchSelected;
+    private string creatureSearchFilter = string.Empty;
 
-    private ExcelSheet<TerritoryType> territoryTypeSheet;
     private ExcelSheet<MJIItemPouch> itemPouchSheet;
-
-    private Dictionary<uint, TextureWrap> todoTextureCache;
 
     public MainWindow(Plugin plugin) : base("ReSanctuary") {
         SizeConstraints = new WindowSizeConstraints {
@@ -39,11 +42,13 @@ public class MainWindow : Window, IDisposable {
         Plugin = plugin;
         gatheringItems = Utils.GetSortedGatheringItems();
         workshopItems = Utils.GetSortedWorkshopItems();
+        creatureItems = Utils.GetCreatureItems();
+        creatureItemDrops = Utils.SeperateCreatureDrops(creatureItems);
 
-        territoryTypeSheet = Plugin.DataManager.Excel.GetSheet<TerritoryType>();
+        weatherList = Utils.GetISWeathers();
+        
         itemPouchSheet = Plugin.DataManager.Excel.GetSheet<MJIItemPouch>();
         
-        todoTextureCache = new();
     }
 
     public void Dispose() { }
@@ -62,23 +67,24 @@ public class MainWindow : Window, IDisposable {
             ImGui.TableHeadersRow();
 
             foreach (var item in gatheringItems) {
-                if (!item.Name.ToLower().Contains(gatheringSearchFilter.ToLower())) continue;
+                var reqToolString = item.RequiredTool != null ? item.RequiredTool.Name : "None";
+
+                if (!item.Name.ToLower().Contains(gatheringSearchFilter.ToLower()) 
+                    && !reqToolString.ToString().ToLower().Contains(gatheringSearchFilter.ToLower())) continue;
 
                 ImGui.TableNextRow();
 
                 ImGui.TableSetColumnIndex(0);
-                var icon = item.Icon;
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(Utils.IconCache(item.Item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
                 ImGui.TableSetColumnIndex(1);
                 ImGui.Text(item.Name);
 
                 ImGui.TableSetColumnIndex(2);
                 if (ImGui.Button("Show on map##ReSanctuary_ShowOnMap_" + item.ItemID)) {
-                    var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
-                    var teri = islandSanctuary.RowId;
+                    var teri = Plugin.islandSanctuary.RowId;
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
@@ -97,7 +103,7 @@ public class MainWindow : Window, IDisposable {
                 }
 
                 ImGui.TableSetColumnIndex(3);
-                ImGui.Text(item.RequiredTool != null ? item.RequiredTool.Name : "None");
+                ImGui.Text(reqToolString);
             }
 
             ImGui.EndTable();
@@ -140,10 +146,9 @@ public class MainWindow : Window, IDisposable {
 
             var item = workshopItems[workshopSearchSelected];
 
-            var icon = item.Icon;
             var iconSize = ImGui.GetTextLineHeight() * 2f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            ImGui.Image(Utils.IconCache(item.Item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.SameLine();
 
@@ -172,22 +177,28 @@ public class MainWindow : Window, IDisposable {
                     var matIconSizeVec = new Vector2(matIconSize, matIconSize);
 
                     if (mat != null) {
-                        ImGui.Image(mat.Icon.ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.Image(Utils.IconCache(mat.Item.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
-                        ImGui.Text($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
+                        ImGui.TextWrapped($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
 
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemID)) {
-                            var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
-                            var teri = islandSanctuary.RowId;
+                            var teri = Plugin.islandSanctuary.RowId;
 
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
-                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+                            //Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
                     } else {
-                        var texture = Plugin.DataManager.GetImGuiTextureIcon(itemPouchItem.Icon);
-                        ImGui.Image(texture.ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.Image(Utils.IconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
-                        ImGui.Text("No data available :(");
+                        if (creatureItemDrops.ContainsKey(itemPouchItem.RowId))
+                        {
+                            ImGui.TextWrapped("Drops from: " + string.Join(", ",Utils.FindDropOnCreatures(itemPouchItem.RowId, creatureItems)));
+                        }
+                        //Last logic is checking crops.
+                        else 
+                        {
+                            ImGui.TextWrapped("No data available :(");
+                    }
                     }
 
                     ImGui.TreePop();
@@ -196,6 +207,136 @@ public class MainWindow : Window, IDisposable {
             
             ImGui.EndChild();
         }
+    }
+
+    private void DrawCreatureTab()
+    {
+        var tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.NoKeepColumnsVisible;
+
+        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
+        ImGui.InputText(string.Empty, ref creatureSearchFilter, 256);
+
+        if (ImGui.BeginTable("ReSanctuary_MainWindowTable", 6, tableFlags))
+        {
+            ImGui.TableSetupColumn("Size/Icon");
+            ImGui.TableSetupColumn("Name");
+            ImGui.TableSetupColumn("Posistion");
+            ImGui.TableSetupColumn("Spawn Requirements");
+            ImGui.TableSetupColumn("Guaranteed Drop");
+            ImGui.TableSetupColumn("Chance of Drop");
+
+            ImGui.TableHeadersRow();
+
+            foreach (var item in creatureItems)
+            {
+                if (!item.Name.ToLower().Contains(creatureSearchFilter.ToLower())
+                    && !item.Item1.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
+                    && !item.Item2.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
+                    && !weatherList[item.Weather].Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
+                    ) continue;
+
+                ImGui.TableNextRow();
+
+                ImGui.TableSetColumnIndex(0);
+                string sizetxt = "";
+                switch (item.Size)
+                {
+                    case 1:
+                        sizetxt = "[S]";
+                        break;
+                    case 2:
+                        sizetxt = "[M]";
+                        break;
+                    case 3:
+                        sizetxt = "[L]";
+                        break;
+                }
+                ImGui.Text(sizetxt);
+                ImGui.SameLine();
+                var iconSize = ImGui.GetTextLineHeight() * 1.5f;
+                var iconSizeVec = new Vector2(iconSize, iconSize);
+                ImGui.Image(Utils.IconCache(item.IconID).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+
+                ImGui.TableSetColumnIndex(1);
+                ImGui.Text(item.Name);
+
+                ImGui.TableSetColumnIndex(2);
+                ImGui.Text(item.IngameX.ToString("F1") + ", " + item.IngameY.ToString("F1"));
+                ImGui.SameLine();
+                ImGui.PushID("ReSanctuary_CreatureMap_" + (int)item.CreatureID);
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt))
+                {
+                    var teri = Plugin.islandSanctuary.RowId;
+
+                    PluginLog.Debug("radius: {radius}", item.Radius);
+
+                    Utils.OpenGatheringMarker(teri, (int)item.MarkerX, (int)item.MarkerZ, item.Radius, item.Name);
+                }
+                ImGui.PopID();
+                ImGui.TableSetColumnIndex(3);
+                //spawn limits
+                if (item.Weather != 0)
+                {
+                    var wiconSize = ImGui.GetTextLineHeight() * 1.25f;
+                    var wiconSizeVec = new Vector2(wiconSize, wiconSize);
+                    ImGui.Image(Utils.IconCache((uint)weatherList[item.Weather].Icon).ImGuiHandle, wiconSizeVec, Vector2.Zero, Vector2.One);
+                    ImGui.SameLine();
+                    ImGui.Text(weatherList[item.Weather].Name);
+                }
+                if (item.SpawnStart != 0 || item.SpawnEnd != 0)
+                {
+                    if (item.Weather !=0)
+                    {
+                        ImGui.SameLine();
+
+                    }
+                    ImGui.Text(Utils.Format24HourAsAmPm(item.SpawnStart) + "-" + Utils.Format24HourAsAmPm(item.SpawnEnd));        
+                }
+                ImGui.TableSetColumnIndex(4);
+                //Item 1
+                var i1iconSize = ImGui.GetTextLineHeight() * 1.5f;
+                var i1iconSizeVec = new Vector2(i1iconSize, i1iconSize);
+                ImGui.Image(Utils.IconCache(item.Item1.Icon).ImGuiHandle, i1iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.SameLine();
+                ImGui.Text(item.Item1ShortName);
+                ImGui.SameLine();
+                ImGui.PushID("ReSanctuary_CreatureItem_" + (int)item.CreatureID + "_" + (int)item.Item1ID);
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList))
+                {
+                    var rowID = itemPouchSheet.First(x => {
+                        var itemValue = x.Item.Value;
+                        if (itemValue == null) return false;
+                        return itemValue.RowId == item.Item1ID;
+                    }).RowId;
+                    Utils.AddToTodoList(Plugin.Configuration, rowID);
+                }
+                ImGui.PopID();
+                ImGui.TableSetColumnIndex(5);
+                //Item 2
+                var i2iconSize = ImGui.GetTextLineHeight() * 1.5f;
+                var i2iconSizeVec = new Vector2(i2iconSize, i2iconSize);
+                ImGui.Image(Utils.IconCache(item.Item2.Icon).ImGuiHandle, i2iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.SameLine(0);
+                ImGui.Text(item.Item2ShortName);
+                ImGui.SameLine();
+                ImGui.PushID("ReSanctuary_CreatureItem_" + (int)item.CreatureID + "_" + (int)item.Item2ID);
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList))
+                {
+                    var rowID = itemPouchSheet.First(x => {
+                        var itemValue = x.Item.Value;
+                        if (itemValue == null) return false;
+                        return itemValue.RowId == item.Item2ID;
+                    }).RowId;
+                    Utils.AddToTodoList(Plugin.Configuration, rowID);
+                }
+                ImGui.PopID();
+
+
+            }
+
+            ImGui.EndTable();
+        }
+
     }
 
     private void DrawTodoTab() {
@@ -209,17 +350,9 @@ public class MainWindow : Window, IDisposable {
             var item = itemPouchSheet.GetRow(id).Item.Value;
             var amnt = amount;
 
-            TextureWrap? icon;
-            if (todoTextureCache.ContainsKey(id)) {
-               icon = todoTextureCache[id]; 
-            } else {
-                icon = Plugin.DataManager.GetImGuiTextureIcon(item.Icon);
-                todoTextureCache[id] = icon;
-            }
-            
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            ImGui.Image(Utils.IconCache(item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.PushItemWidth(100 * ImGuiHelpers.GlobalScale);
             ImGui.SameLine();
@@ -280,6 +413,12 @@ public class MainWindow : Window, IDisposable {
                 ImGui.EndTabItem();
             }
 
+            if (ImGui.BeginTabItem("Creature"))
+            {
+                DrawCreatureTab();
+                ImGui.EndTabItem();
+            }
+
             if (ImGui.BeginTabItem("Todo")) {
                 DrawTodoTab();
                 ImGui.EndTabItem();
@@ -289,6 +428,8 @@ public class MainWindow : Window, IDisposable {
                 DrawAboutTab();
                 ImGui.EndTabItem();
             }
+
+
         }
     }
 }

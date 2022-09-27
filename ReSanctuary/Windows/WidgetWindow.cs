@@ -51,17 +51,9 @@ public class WidgetWindow : Window, IDisposable {
     }
 
     private void DrawGarbage(uint id, int amount, Item item, int has) {
-        TextureWrap? icon;
-        if (todoTextureCache.ContainsKey(id)) {
-            icon = todoTextureCache[id];
-        } else {
-            icon = Plugin.DataManager.GetImGuiTextureIcon(item.Icon);
-            todoTextureCache[id] = icon;
-        }
-
         var iconSize = ImGui.GetTextLineHeight() * 1.25f;
         var iconSizeVec = new Vector2(iconSize, iconSize);
-        ImGui.Image(icon.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+        ImGui.Image(Utils.IconCache(item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
         ImGui.SameLine();
 

@@ -6,6 +6,11 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using ReSanctuary.Windows;
+using ImGuiScene;
+using System.Collections.Generic;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
+using System.Linq;
 
 namespace ReSanctuary;
 
@@ -21,6 +26,10 @@ public sealed class Plugin : IDalamudPlugin {
     public Configuration Configuration { get; private set; }
     public WindowSystem WindowSystem = new("ReSanctuary");
 
+    public static Dictionary<uint, TextureWrap> iconCache = new();
+
+    public static TerritoryType islandSanctuary { get; set; }
+
     public Plugin() {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize(PluginInterface);
@@ -28,6 +37,9 @@ public sealed class Plugin : IDalamudPlugin {
         WindowSystem.AddWindow(new ConfigWindow(this));
         WindowSystem.AddWindow(new MainWindow(this));
         WindowSystem.AddWindow(new WidgetWindow(this));
+
+        ExcelSheet<TerritoryType> territoryTypeSheet = DataManager.Excel.GetSheet<TerritoryType>();
+        islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
             HelpMessage = "Opens the main ReSanctuary interface."

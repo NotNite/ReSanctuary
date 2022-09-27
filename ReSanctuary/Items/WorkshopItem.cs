@@ -14,7 +14,6 @@ public class WorkshopItem : BaseItem {
         Name = item.Name;
         Item = item;
         ItemID = item.RowId;
-        Icon = Plugin.DataManager.GetImGuiTextureIcon(item.Icon);
         RowID = workshopItem.RowId;
         UIIndex = (byte)workshopItem.RowId;
 
