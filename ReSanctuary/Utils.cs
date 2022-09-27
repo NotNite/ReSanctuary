@@ -80,12 +80,10 @@ public static class Utils {
 
         var creatures = new List<CreatureItem>();
         var enumerator = creatureSheet.GetEnumerator();
-        while (enumerator.MoveNext())
-        {
+        while (enumerator.MoveNext()) {
             var current = enumerator.Current;
             var creatureID = current.ReadColumn<uint>(0);
-            if (creatureID > 0)
-            {
+            if (creatureID > 0) {
                 var ci = new CreatureItem();
 
                 ci.CreatureID = creatureID;
@@ -102,8 +100,7 @@ public static class Utils {
                 ci.Item2ShortName = ci.Item2.Name.RawString.Replace("Sanctuary ", "");
 
                 CreatureExtraData? ed = CreatureData.GetCreatureExtraData(ci.CreatureID);
-                if (ed != null)
-                {
+                if (ed != null) {
                     ci.Name = ed.Name;
                     ci.SpawnStart = ed.SpawnStart;
                     ci.SpawnEnd = ed.SpawnEnd;
@@ -113,12 +110,11 @@ public static class Utils {
                     ci.Radius = ed.Radius;
                 }
 
-                ci.MarkerX = Utils.ConvertMapCoordToWorldCoordXZ((float)ci.IngameX, 100, -175);
-                ci.MarkerZ = Utils.ConvertMapCoordToWorldCoordXZ((float)ci.IngameY, 100, 138);
+                ci.MarkerX = ConvertMapCoordToWorldCoordXZ((float)ci.IngameX, 100, -175);
+                ci.MarkerZ = ConvertMapCoordToWorldCoordXZ((float)ci.IngameY, 100, 138);
 
                 creatures.Add(ci);
             }
-            
         }
 
         creatures.Sort((x, y) => x.UIIndex.CompareTo(y.UIIndex));
@@ -126,64 +122,57 @@ public static class Utils {
         return creatures;
     }
 
-    public static Dictionary<uint, string> SeperateCreatureDrops(List<CreatureItem> creatures)
-    {
+    public static Dictionary<uint, string> SeperateCreatureDrops(List<CreatureItem> creatures) {
         Dictionary<uint, string> drops = new Dictionary<uint, string>();
-        foreach (CreatureItem item in creatures)
-        {
+        foreach (CreatureItem item in creatures) {
             drops.TryAdd(item.Item1ID, item.Item1.Name);
             drops.TryAdd(item.Item2ID, item.Item2.Name);
         }
+
         return drops;
     }
 
-    public static List<string> FindDropOnCreatures(uint itemid, List<CreatureItem> creatures)
-    {
+    public static List<string> FindDropOnCreatures(uint itemid, List<CreatureItem> creatures) {
         List<string> droplist = new List<string>();
-        foreach (CreatureItem item in creatures)
-        {
-            if (item.Item1ID == itemid || item.Item2ID == itemid)
-            { droplist.Add(item.Name); }
+        foreach (CreatureItem item in creatures) {
+            if (item.Item1ID == itemid || item.Item2ID == itemid) {
+                droplist.Add(item.Name);
+            }
         }
+
         return droplist;
     }
 
-    public static Dictionary<uint,Weather> GetISWeathers()
-    {
+    public static Dictionary<uint, Weather> GetISWeathers() {
         Dictionary<uint, Weather> list = new Dictionary<uint, Weather>();
-        List<uint> weathers = new List<uint> {0,1,2,3,4,7,8};
+        List<uint> weathers = new List<uint> { 0, 1, 2, 3, 4, 7, 8 };
 
         var weatherSheet = Plugin.DataManager.Excel.GetSheet<Weather>();
 
-        foreach (uint item in weathers)
-        {
-            var weatherRow = weatherSheet.GetRow((uint)item);
+        foreach (uint item in weathers) {
+            var weatherRow = weatherSheet.GetRow(item);
             list.Add(item, weatherRow);
             IconCachePreload((uint)weatherRow.Icon);
         }
 
         return list;
-
     }
 
-    public static void IconCachePreload(uint iconID)
-    {
-        if (!Plugin.iconCache.ContainsKey(iconID))
-        {
+    public static void IconCachePreload(uint iconID) {
+        if (!Plugin.IconCache.ContainsKey(iconID)) {
             //PluginLog.Debug("Add iconID " + iconID + " to IconCache");
             var icon = Plugin.DataManager.GetImGuiTextureIcon(iconID);
-            Plugin.iconCache[iconID] = icon;
+            Plugin.IconCache[iconID] = icon;
         }
+
         return;
     }
 
-    public static TextureWrap IconCache(uint iconID)
-    {
+    public static TextureWrap IconCache(uint iconID) {
         // Ensure icon is loaded
         IconCachePreload(iconID);
         // Return icon
-        return Plugin.iconCache[iconID];
-
+        return Plugin.IconCache[iconID];
     }
 
 
@@ -191,7 +180,7 @@ public static class Utils {
         var todoList = config.TodoList;
         if (!todoList.ContainsKey(id)) todoList[id] = 0;
         todoList[id] += amount;
-        
+
         config.TodoList = todoList;
         config.Save();
     }
@@ -200,29 +189,26 @@ public static class Utils {
         return InventoryManager.Instance()->GetInventoryItemCount(id);
     }
 
-    public static string Format24HourAsAmPm(int hour)
-    {
+    public static string Format24HourAsAmPm(int hour) {
         var ampm = "am";
-        if (hour >= 12)
-        {
+        if (hour >= 12) {
             ampm = "pm";
             hour -= 12;
         }
-        if (hour == 0) { hour = 12; }
 
-        return hour.ToString() + ampm;
+        if (hour == 0) {
+            hour = 12;
+        }
+
+        return hour + ampm;
     }
 
     //Copied from Dalamud.Utility.MapUtil
-    public static float ConvertWorldCoordXZToMapCoord(float value, uint scale, int offset)
-    {
-        return 0.02f * (float)offset + 2048f / (float)scale + 0.02f * value + 1f;
+    public static float ConvertWorldCoordXZToMapCoord(float value, uint scale, int offset) {
+        return 0.02f * offset + 2048f / scale + 0.02f * value + 1f;
     }
 
-    public static float ConvertMapCoordToWorldCoordXZ(float value, uint scale, int offset)
-    {
-        return (value - (0.02f * (float)offset) - (2048f / (float)scale) - 1f) /0.02f ;
-
+    public static float ConvertMapCoordToWorldCoordXZ(float value, uint scale, int offset) {
+        return (value - 0.02f * offset - 2048f / scale - 1f) / 0.02f;
     }
-
 }

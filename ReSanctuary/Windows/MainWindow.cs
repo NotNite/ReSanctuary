@@ -20,7 +20,7 @@ public class MainWindow : Window, IDisposable {
     private List<GatheringItem> gatheringItems;
     private List<WorkshopItem> workshopItems;
     private List<Creature.CreatureItem> creatureItems;
-    private Dictionary<uint,string> creatureItemDrops;
+    private Dictionary<uint, string> creatureItemDrops;
 
     private Dictionary<uint, Weather> weatherList;
 
@@ -46,9 +46,8 @@ public class MainWindow : Window, IDisposable {
         creatureItemDrops = Utils.SeperateCreatureDrops(creatureItems);
 
         weatherList = Utils.GetISWeathers();
-        
+
         itemPouchSheet = Plugin.DataManager.Excel.GetSheet<MJIItemPouch>();
-        
     }
 
     public void Dispose() { }
@@ -69,7 +68,7 @@ public class MainWindow : Window, IDisposable {
             foreach (var item in gatheringItems) {
                 var reqToolString = item.RequiredTool != null ? item.RequiredTool.Name : "None";
 
-                if (!item.Name.ToLower().Contains(gatheringSearchFilter.ToLower()) 
+                if (!item.Name.ToLower().Contains(gatheringSearchFilter.ToLower())
                     && !reqToolString.ToString().ToLower().Contains(gatheringSearchFilter.ToLower())) continue;
 
                 ImGui.TableNextRow();
@@ -84,13 +83,13 @@ public class MainWindow : Window, IDisposable {
 
                 ImGui.TableSetColumnIndex(2);
                 if (ImGui.Button("Show on map##ReSanctuary_ShowOnMap_" + item.ItemID)) {
-                    var teri = Plugin.islandSanctuary.RowId;
+                    var teri = Plugin.IslandSanctuary.RowId;
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
                     Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name);
                 }
-                
+
                 ImGui.SameLine();
 
                 if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.ItemID)) {
@@ -153,12 +152,12 @@ public class MainWindow : Window, IDisposable {
             ImGui.SameLine();
 
             ImGui.Text($"{item.Name}\nDuration: {item.CraftingTime} hours");
-            
+
             if (ImGui.Button("Add to todo list##ReSanctuary_WorkshopAddTodo_" + item.ItemID)) {
                 foreach (var (requiredMat, matCount) in item.Materials) {
                     Utils.AddToTodoList(Plugin.Configuration, requiredMat, matCount);
                 }
-                
+
                 Plugin.WindowSystem.GetWindow("ReSanctuary Widget").IsOpen = true;
             }
 
@@ -166,7 +165,7 @@ public class MainWindow : Window, IDisposable {
             foreach (var (requiredMat, matCount) in item.Materials) {
                 var itemPouchRow = itemPouchSheet.GetRow(requiredMat);
                 var itemPouchItem = itemPouchRow.Item.Value;
-                
+
                 var mat = gatheringItems.Find(x => x.ItemID == itemPouchItem.RowId);
 
                 var name = itemPouchItem.Name;
@@ -177,47 +176,48 @@ public class MainWindow : Window, IDisposable {
                     var matIconSizeVec = new Vector2(matIconSize, matIconSize);
 
                     if (mat != null) {
-                        ImGui.Image(Utils.IconCache(mat.Item.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.Image(Utils.IconCache(mat.Item.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero,
+                            Vector2.One);
                         ImGui.SameLine();
-                        ImGui.TextWrapped($"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
+                        ImGui.TextWrapped(
+                            $"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
 
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemID)) {
-                            var teri = Plugin.islandSanctuary.RowId;
+                            var teri = Plugin.IslandSanctuary.RowId;
 
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                             //Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
                     } else {
-                        ImGui.Image(Utils.IconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero, Vector2.One);
+                        ImGui.Image(Utils.IconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec, Vector2.Zero,
+                            Vector2.One);
                         ImGui.SameLine();
-                        if (creatureItemDrops.ContainsKey(itemPouchItem.RowId))
-                        {
-                            ImGui.TextWrapped("Drops from: " + string.Join(", ",Utils.FindDropOnCreatures(itemPouchItem.RowId, creatureItems)));
+                        if (creatureItemDrops.ContainsKey(itemPouchItem.RowId)) {
+                            ImGui.TextWrapped("Drops from: " + string.Join(", ",
+                                Utils.FindDropOnCreatures(itemPouchItem.RowId, creatureItems)));
                         }
                         //Last logic is checking crops.
-                        else 
-                        {
+                        else {
                             ImGui.TextWrapped("No data available :(");
-                    }
+                        }
                     }
 
                     ImGui.TreePop();
                 }
             }
-            
+
             ImGui.EndChild();
         }
     }
 
-    private void DrawCreatureTab()
-    {
-        var tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.NoKeepColumnsVisible;
+    private void DrawCreatureTab() {
+        var tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingFixedFit |
+                         ImGuiTableFlags.NoKeepColumnsVisible;
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
         ImGui.InputText(string.Empty, ref creatureSearchFilter, 256);
 
-        if (ImGui.BeginTable("ReSanctuary_MainWindowTable", 6, tableFlags))
-        {
+        if (ImGui.BeginTable("ReSanctuary_MainWindowTable", 6, tableFlags)) {
             ImGui.TableSetupColumn("Size/Icon");
             ImGui.TableSetupColumn("Name");
             ImGui.TableSetupColumn("Posistion");
@@ -227,20 +227,18 @@ public class MainWindow : Window, IDisposable {
 
             ImGui.TableHeadersRow();
 
-            foreach (var item in creatureItems)
-            {
+            foreach (var item in creatureItems) {
                 if (!item.Name.ToLower().Contains(creatureSearchFilter.ToLower())
                     && !item.Item1.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
                     && !item.Item2.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
                     && !weatherList[item.Weather].Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
-                    ) continue;
+                   ) continue;
 
                 ImGui.TableNextRow();
 
                 ImGui.TableSetColumnIndex(0);
                 string sizetxt = "";
-                switch (item.Size)
-                {
+                switch (item.Size) {
                     case 1:
                         sizetxt = "[S]";
                         break;
@@ -251,6 +249,7 @@ public class MainWindow : Window, IDisposable {
                         sizetxt = "[L]";
                         break;
                 }
+
                 ImGui.Text(sizetxt);
                 ImGui.SameLine();
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
@@ -264,34 +263,35 @@ public class MainWindow : Window, IDisposable {
                 ImGui.Text(item.IngameX.ToString("F1") + ", " + item.IngameY.ToString("F1"));
                 ImGui.SameLine();
                 ImGui.PushID("ReSanctuary_CreatureMap_" + (int)item.CreatureID);
-                if (ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt))
-                {
-                    var teri = Plugin.islandSanctuary.RowId;
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt)) {
+                    var teri = Plugin.IslandSanctuary.RowId;
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
                     Utils.OpenGatheringMarker(teri, (int)item.MarkerX, (int)item.MarkerZ, item.Radius, item.Name);
                 }
+
                 ImGui.PopID();
                 ImGui.TableSetColumnIndex(3);
                 //spawn limits
-                if (item.Weather != 0)
-                {
+                if (item.Weather != 0) {
                     var wiconSize = ImGui.GetTextLineHeight() * 1.25f;
                     var wiconSizeVec = new Vector2(wiconSize, wiconSize);
-                    ImGui.Image(Utils.IconCache((uint)weatherList[item.Weather].Icon).ImGuiHandle, wiconSizeVec, Vector2.Zero, Vector2.One);
+                    ImGui.Image(Utils.IconCache((uint)weatherList[item.Weather].Icon).ImGuiHandle, wiconSizeVec,
+                        Vector2.Zero, Vector2.One);
                     ImGui.SameLine();
                     ImGui.Text(weatherList[item.Weather].Name);
                 }
-                if (item.SpawnStart != 0 || item.SpawnEnd != 0)
-                {
-                    if (item.Weather !=0)
-                    {
-                        ImGui.SameLine();
 
+                if (item.SpawnStart != 0 || item.SpawnEnd != 0) {
+                    if (item.Weather != 0) {
+                        ImGui.SameLine();
                     }
-                    ImGui.Text(Utils.Format24HourAsAmPm(item.SpawnStart) + "-" + Utils.Format24HourAsAmPm(item.SpawnEnd));        
+
+                    ImGui.Text(
+                        Utils.Format24HourAsAmPm(item.SpawnStart) + "-" + Utils.Format24HourAsAmPm(item.SpawnEnd));
                 }
+
                 ImGui.TableSetColumnIndex(4);
                 //Item 1
                 var i1iconSize = ImGui.GetTextLineHeight() * 1.5f;
@@ -301,8 +301,7 @@ public class MainWindow : Window, IDisposable {
                 ImGui.Text(item.Item1ShortName);
                 ImGui.SameLine();
                 ImGui.PushID("ReSanctuary_CreatureItem_" + (int)item.CreatureID + "_" + (int)item.Item1ID);
-                if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList))
-                {
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList)) {
                     var rowID = itemPouchSheet.First(x => {
                         var itemValue = x.Item.Value;
                         if (itemValue == null) return false;
@@ -310,6 +309,7 @@ public class MainWindow : Window, IDisposable {
                     }).RowId;
                     Utils.AddToTodoList(Plugin.Configuration, rowID);
                 }
+
                 ImGui.PopID();
                 ImGui.TableSetColumnIndex(5);
                 //Item 2
@@ -320,8 +320,7 @@ public class MainWindow : Window, IDisposable {
                 ImGui.Text(item.Item2ShortName);
                 ImGui.SameLine();
                 ImGui.PushID("ReSanctuary_CreatureItem_" + (int)item.CreatureID + "_" + (int)item.Item2ID);
-                if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList))
-                {
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList)) {
                     var rowID = itemPouchSheet.First(x => {
                         var itemValue = x.Item.Value;
                         if (itemValue == null) return false;
@@ -329,14 +328,12 @@ public class MainWindow : Window, IDisposable {
                     }).RowId;
                     Utils.AddToTodoList(Plugin.Configuration, rowID);
                 }
+
                 ImGui.PopID();
-
-
             }
 
             ImGui.EndTable();
         }
-
     }
 
     private void DrawTodoTab() {
@@ -363,10 +360,11 @@ public class MainWindow : Window, IDisposable {
                 } else {
                     todoList.Remove(id);
                 }
-                
+
                 Plugin.Configuration.TodoList = todoList;
                 Plugin.Configuration.Save();
             }
+
             ImGui.PopItemWidth();
 
             ImGui.SameLine();
@@ -375,6 +373,7 @@ public class MainWindow : Window, IDisposable {
             if (ImGui.Button(trashIcon + $"##ReSanctuary_TodoListTrash_{id}")) {
                 todoList.Remove(id);
             }
+
             ImGui.PopFont();
 
             ImGui.SameLine();
@@ -413,8 +412,7 @@ public class MainWindow : Window, IDisposable {
                 ImGui.EndTabItem();
             }
 
-            if (ImGui.BeginTabItem("Creature"))
-            {
+            if (ImGui.BeginTabItem("Creature")) {
                 DrawCreatureTab();
                 ImGui.EndTabItem();
             }
@@ -428,8 +426,6 @@ public class MainWindow : Window, IDisposable {
                 DrawAboutTab();
                 ImGui.EndTabItem();
             }
-
-
         }
     }
 }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using ImGuiScene;
-using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+﻿using Lumina.Excel.GeneratedSheets;
 
 namespace ReSanctuary.Creature;
 
-public class CreatureExtraData
-{
+public class CreatureExtraData {
     public string Name;
     public int SpawnStart;
     public int SpawnEnd;
@@ -15,11 +10,9 @@ public class CreatureExtraData
     public double IngameX;
     public double IngameY;
     public ushort Radius;
-
 }
 
-public class CreatureItem
-{
+public class CreatureItem {
     public string Name;
     public uint CreatureID;
     public byte CreatureType;
@@ -42,5 +35,4 @@ public class CreatureItem
     public float MarkerX;
     public float MarkerZ;
     public ushort Radius;
-
 }
