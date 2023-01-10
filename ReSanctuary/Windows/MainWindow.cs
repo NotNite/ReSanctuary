@@ -213,7 +213,9 @@ public class MainWindow : Window, IDisposable {
     private void DrawCreatureTab() {
         var tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingFixedFit |
                          ImGuiTableFlags.NoKeepColumnsVisible;
-
+        
+        ImGui.Text("The data on this tab is crowdsourced and may not be accurate or complete.");
+        
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
         ImGui.InputText(string.Empty, ref creatureSearchFilter, 256);
 
@@ -228,6 +230,7 @@ public class MainWindow : Window, IDisposable {
             ImGui.TableHeadersRow();
 
             foreach (var item in creatureItems) {
+                if (item.Name == null) continue;
                 if (!item.Name.ToLower().Contains(creatureSearchFilter.ToLower())
                     && !item.Item1.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
                     && !item.Item2.Name.ToString().ToLower().Contains(creatureSearchFilter.ToLower())
