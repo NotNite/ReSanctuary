@@ -24,6 +24,7 @@ public static class Utils {
         var gatheringSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIGatheringItem");
         var itemSheet = Plugin.DataManager.Excel.GetSheet<Item>();
         var keyItemSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIKeyItem");
+        var gatheringToolSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIGatheringTool");
 
         var items = new List<GatheringItem>();
         var enumerator = gatheringSheet.GetEnumerator();
@@ -38,7 +39,8 @@ public static class Utils {
             Item? tool = null;
             var toolID = current.ReadColumn<byte>(2);
             if (toolID > 0) {
-                var toolRow = keyItemSheet.GetRow(toolID);
+                var gatheringToolID = gatheringToolSheet.GetRow(toolID).ReadColumn<byte>(0);
+                var toolRow = keyItemSheet.GetRow(gatheringToolID);
                 var toolItemID = toolRow.ReadColumn<int>(0);
                 tool = itemSheet.GetRow((uint)toolItemID);
             }
