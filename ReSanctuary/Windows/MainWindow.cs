@@ -253,7 +253,6 @@ public class MainWindow : Window, IDisposable {
                         sizetxt = "[L]";
                         break;
                 }
-
                 ImGui.Text(sizetxt);
 
                 ImGui.TableSetColumnIndex(1);
@@ -265,8 +264,7 @@ public class MainWindow : Window, IDisposable {
                 ImGui.Text(item.Name);
 
                 ImGui.TableSetColumnIndex(3);
-                if (item.IngameX != -1 && item.IngameY != -1 && item.Radius != 0)
-                {
+                if (item.IngameX != -1 && item.IngameY != -1 && item.Radius != 0) {
                 ImGui.Text(item.IngameX.ToString("F1") + ", " + item.IngameY.ToString("F1"));
                 ImGui.SameLine();
                 ImGui.PushID("ReSanctuary_CreatureMap_" + (int)item.CreatureID);
@@ -278,19 +276,16 @@ public class MainWindow : Window, IDisposable {
 
                     Utils.OpenGatheringMarker(teri, (int)item.MarkerX, (int)item.MarkerZ, item.Radius, item.Name);
                 }
-
                 ImGui.PopID();
                 }
-                else
-                {
+                else {
                     ImGui.TextDisabled("Unconfirmed");
                 }
 
                 
                 ImGui.TableSetColumnIndex(4);
                 //spawn limits
-                if (item.SpawnStart != -1 && item.SpawnEnd != -1)
-                {
+                if (item.SpawnStart != -1 && item.SpawnEnd != -1) {
                 if (item.Weather != 0) {
                     var wiconSize = ImGui.GetTextLineHeight() * 1.25f;
                     var wiconSizeVec = new Vector2(wiconSize, wiconSize);
@@ -309,8 +304,7 @@ public class MainWindow : Window, IDisposable {
                         Utils.Format24HourAsAmPm(item.SpawnStart) + "-" + Utils.Format24HourAsAmPm(item.SpawnEnd));
                 }
                 }
-                else
-                {
+                else {
                     ImGui.TextDisabled("Unknown");
                 }
 

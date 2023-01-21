@@ -102,8 +102,7 @@ public static class Utils {
                 ci.Item2ShortName = ci.Item2.Name.RawString.Replace("Sanctuary ", "");
 
                 CreatureExtraData? ed = CreatureData.GetCreatureExtraData(ci.CreatureID);
-                if (ed != null)
-                {
+                if (ed != null) {
                     ci.Name = ed.Name;
                     ci.SpawnStart = ed.SpawnStart;
                     ci.SpawnEnd = ed.SpawnEnd;
@@ -112,8 +111,7 @@ public static class Utils {
                     ci.IngameY = ed.IngameY;
                     ci.Radius = ed.Radius;
                 }
-                else 
-                {
+                else {
                     ci.Name = " . . . . ";
                     ci.SpawnStart = -1;
                     ci.SpawnEnd = -1;
