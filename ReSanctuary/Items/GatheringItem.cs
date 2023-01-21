@@ -1,5 +1,4 @@
-﻿using ImGuiScene;
-using Lumina.Excel;
+﻿using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ReSanctuary;

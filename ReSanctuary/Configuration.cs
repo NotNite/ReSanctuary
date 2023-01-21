@@ -15,6 +15,7 @@ public class Configuration : IPluginConfiguration {
     public bool LockWidget { get; set; }
     
 
+
     // the below exist just to make saving less cumbersome
     [NonSerialized] private DalamudPluginInterface? PluginInterface;
 

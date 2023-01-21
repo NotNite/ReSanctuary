@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Authors>NotNite</Authors>
-        <Version>1.1.0.8</Version>
+        <Version>1.2.0.2</Version>
         <Description>Improve your Island Sanctuary experience.</Description>
         <Copyright>MIT</Copyright>
         <PackageProjectUrl>https://github.com/NotNite/ReSanctuary</PackageProjectUrl>
@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <Platforms>x64</Platforms>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -26,7 +26,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DalamudPackager" Version="2.1.8" />
+        <PackageReference Include="DalamudPackager" Version="2.1.10" />
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>
