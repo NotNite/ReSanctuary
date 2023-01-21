@@ -361,9 +361,9 @@ internal class CreatureData {
                     SpawnStart = 3,
                     SpawnEnd = 6,
                     Weather = ISWEATHER_CLOUDS,
-                    IngameX = -1,
-                    IngameY = -1,
-                    Radius = 15
+                    IngameX = 19.4,
+                    IngameY = 19.0,
+                    Radius = 10
                 };
                 break;
         }
