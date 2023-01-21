@@ -330,6 +330,42 @@ internal class CreatureData {
                     Radius = 11
                 };
                 break;
+            case 14935:
+                data = new CreatureExtraData
+                {
+                    Name = "Griffin",
+                    SpawnStart = 15,
+                    SpawnEnd = 18,
+                    Weather = ISWEATHER_CLEAR,
+                    IngameX = 14.8,
+                    IngameY = 22.6,
+                    Radius = 12
+                };
+                break;
+            case 16068:
+                data = new CreatureExtraData
+                {
+                    Name = "Tiger of Paradise",
+                    SpawnStart = 18,
+                    SpawnEnd = 21,
+                    Weather = ISWEATHER_FAIR,
+                    IngameX = -1,
+                    IngameY = -1,
+                    Radius = 15
+                };
+                break;
+            case 16069:
+                data = new CreatureExtraData
+                {
+                    Name = "Morbol Seedling",
+                    SpawnStart = 3,
+                    SpawnEnd = 6,
+                    Weather = ISWEATHER_CLOUDS,
+                    IngameX = -1,
+                    IngameY = -1,
+                    Radius = 15
+                };
+                break;
         }
 
         return data;
