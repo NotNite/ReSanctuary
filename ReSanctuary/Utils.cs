@@ -102,7 +102,8 @@ public static class Utils {
                 ci.Item2ShortName = ci.Item2.Name.RawString.Replace("Sanctuary ", "");
 
                 CreatureExtraData? ed = CreatureData.GetCreatureExtraData(ci.CreatureID);
-                if (ed != null) {
+                if (ed != null)
+                {
                     ci.Name = ed.Name;
                     ci.SpawnStart = ed.SpawnStart;
                     ci.SpawnEnd = ed.SpawnEnd;
@@ -110,6 +111,17 @@ public static class Utils {
                     ci.IngameX = ed.IngameX;
                     ci.IngameY = ed.IngameY;
                     ci.Radius = ed.Radius;
+                }
+                else 
+                {
+                    ci.Name = " . . . . ";
+                    ci.SpawnStart = -1;
+                    ci.SpawnEnd = -1;
+                    ci.Weather = 0;
+                    ci.IngameX = -1;
+                    ci.IngameY = -1;
+                    ci.Radius = 0;
+
                 }
 
                 ci.MarkerX = ConvertMapCoordToWorldCoordXZ((float)ci.IngameX, 100, -175);
