@@ -350,8 +350,8 @@ internal class CreatureData {
                     SpawnEnd = 21,
                     Weather = ISWEATHER_FAIR,
                     IngameX = 14.9,
-                    IngameY = 13.9,
-                    Radius = 10
+                    IngameY = 14.0,
+                    Radius = 11
                 };
                 break;
             case 16069:
