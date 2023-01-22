@@ -111,6 +111,16 @@ public static class Utils {
                     ci.IngameY = ed.IngameY;
                     ci.Radius = ed.Radius;
                 }
+                else {
+                    ci.Name = " . . . . ";
+                    ci.SpawnStart = -1;
+                    ci.SpawnEnd = -1;
+                    ci.Weather = 0;
+                    ci.IngameX = -1;
+                    ci.IngameY = -1;
+                    ci.Radius = 0;
+
+                }
 
                 ci.MarkerX = ConvertMapCoordToWorldCoordXZ((float)ci.IngameX, 100, -175);
                 ci.MarkerZ = ConvertMapCoordToWorldCoordXZ((float)ci.IngameY, 100, 138);
