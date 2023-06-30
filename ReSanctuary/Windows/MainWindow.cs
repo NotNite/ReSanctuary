@@ -87,7 +87,7 @@ public class MainWindow : Window, IDisposable {
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
-                    Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name);
+                    Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name, item.Item.Icon);
                 }
 
                 ImGui.SameLine();
@@ -185,7 +185,7 @@ public class MainWindow : Window, IDisposable {
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemID)) {
                             var teri = Plugin.IslandSanctuary.RowId;
 
-                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, item.Item.Icon);
                             //Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
                         }
                     } else {
@@ -274,7 +274,7 @@ public class MainWindow : Window, IDisposable {
 
                     PluginLog.Debug("radius: {radius}", item.Radius);
 
-                    Utils.OpenGatheringMarker(teri, (int)item.MarkerX, (int)item.MarkerZ, item.Radius, item.Name);
+                    Utils.OpenGatheringMarker(teri, (int)item.MarkerX, (int)item.MarkerZ, item.Radius, item.Name, item.IconID);
                 }
                 ImGui.PopID();
                 }

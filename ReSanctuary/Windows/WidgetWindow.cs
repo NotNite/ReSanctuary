@@ -65,7 +65,7 @@ public class WidgetWindow : Window, IDisposable {
                 var islandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
                 var teri = islandSanctuary.RowId;
 
-                Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+                Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, mat.Item.Icon);
             }
         }
 

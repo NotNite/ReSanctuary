@@ -11,12 +11,12 @@ using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
 namespace ReSanctuary;
 
 public static class Utils {
-    public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name) {
+    public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name, uint icon) {
         var agent = AgentMap.Instance();
         PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId, agent->CurrentMapId);
         if (teri != agent->CurrentTerritoryId) return;
 
-        agent->AddGatheringTempMarker(x, y, radius);
+        agent->AddGatheringTempMarker(x, y, radius, icon, 4u, name);
         agent->OpenMap(agent->CurrentMapId, teri, name, MapType.GatheringLog);
     }
 
