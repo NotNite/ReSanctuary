@@ -4,18 +4,13 @@ using Lumina.Excel.GeneratedSheets;
 namespace ReSanctuary;
 
 public class GatheringItem : BaseItem {
-    public Item? RequiredTool;
-    public short X;
-    public short Y;
-    public ushort Radius;
+    public readonly Item? RequiredTool;
+    public readonly short X;
+    public readonly short Y;
+    public readonly ushort Radius;
 
-    public GatheringItem(RowParser gatheringItem, Item item, Item? tool) {
-        Name = item.Name;
-        Item = item;
-        ItemID = item.RowId;
-        RowID = gatheringItem.RowId;
-        UIIndex = gatheringItem.ReadColumn<byte>(1);
-
+    public GatheringItem(RowParser gatheringItem, Item item, Item? tool)
+        : base(gatheringItem, item, gatheringItem.ReadColumn<byte>(1)) {
         RequiredTool = tool;
         X = gatheringItem.ReadColumn<short>(3);
         Y = gatheringItem.ReadColumn<short>(4);

@@ -1,16 +1,14 @@
-﻿using System.IO;
-using Dalamud.Data;
-using Dalamud.Game;
+﻿using Dalamud.Data;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using ReSanctuary.Windows;
-using ImGuiScene;
 using System.Collections.Generic;
-using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 using System.Linq;
+using Lumina.Excel;
+using ReSanctuary.Creature;
 
 namespace ReSanctuary;
 
@@ -18,34 +16,57 @@ public sealed class Plugin : IDalamudPlugin {
     public string Name => "ReSanctuary";
     private const string CommandName = "/psanctuary";
 
-    [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; }
-    [PluginService] public static CommandManager CommandManager { get; private set; }
-    [PluginService] public static DataManager DataManager { get; private set; }
-    [PluginService] public static SigScanner SigScanner { get; private set; }
+    [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
+    [PluginService] public static CommandManager CommandManager { get; private set; } = null!;
+    [PluginService] public static DataManager DataManager { get; private set; } = null!;
 
     public Configuration Configuration { get; private set; }
-    public WindowSystem WindowSystem = new("ReSanctuary");
 
-    public static Dictionary<uint, TextureWrap> IconCache = new();
-    public static TerritoryType IslandSanctuary { get; set; }
+    public readonly WindowSystem WindowSystem = new("ReSanctuary");
+    public readonly MainWindow MainWindow;
+    public readonly WidgetWindow WidgetWindow;
+    
+    public readonly List<GatheringItem> GatheringItems;
+    public readonly List<WorkshopItem> WorkshopItems;
+    public readonly List<CreatureItem> CreatureItems;
+    public readonly Dictionary<uint, string> CreatureItemDrops;
+    public readonly Dictionary<uint, Weather> WeatherList;
+    
+    // ReSharper disable InconsistentNaming
+    public readonly ExcelSheet<TerritoryType> TerritoryTypeSheet;
+    public readonly ExcelSheet<Item> ItemSheet;
+    public readonly RawExcelSheet MJIItemPouchSheet;
+    // ReSharper restore InconsistentNaming
+
+    public readonly TerritoryType IslandSanctuary;
 
     public Plugin() {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize(PluginInterface);
 
-        WindowSystem.AddWindow(new ConfigWindow(this));
-        WindowSystem.AddWindow(new MainWindow(this));
-        WindowSystem.AddWindow(new WidgetWindow(this));
-
-        ExcelSheet<TerritoryType> territoryTypeSheet = DataManager.Excel.GetSheet<TerritoryType>();
-        IslandSanctuary = territoryTypeSheet.First(x => x.Name == "h1m2");
+        this.MainWindow = new MainWindow(this);
+        this.WidgetWindow = new WidgetWindow(this);
+        this.WindowSystem.AddWindow(this.MainWindow);
+        this.WindowSystem.AddWindow(this.WidgetWindow);
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
             HelpMessage = "Opens the main ReSanctuary interface."
         });
 
-        PluginInterface.UiBuilder.Draw += DrawUI;
-        PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+        PluginInterface.UiBuilder.Draw += this.DrawUi;
+        PluginInterface.UiBuilder.OpenConfigUi += this.DrawConfigUi;
+        
+        this.TerritoryTypeSheet = DataManager.GetExcelSheet<TerritoryType>()!;
+        this.ItemSheet = DataManager.GetExcelSheet<Item>()!;
+        this.MJIItemPouchSheet = DataManager.Excel.GetSheetRaw("MJIItemPouch")!;
+        
+        this.IslandSanctuary = this.TerritoryTypeSheet.First(x => x.Name == "h1m2");
+        
+        this.GatheringItems = Utils.GetSortedGatheringItems();
+        this.WorkshopItems = Utils.GetSortedWorkshopItems();
+        this.CreatureItems = Utils.GetCreatureItems();
+        this.CreatureItemDrops = Utils.SeparateCreatureDrops(this.CreatureItems);
+        this.WeatherList = Utils.GetSanctuaryWeathers();
     }
 
     public void Dispose() {
@@ -55,24 +76,21 @@ public sealed class Plugin : IDalamudPlugin {
 
     private void OnCommand(string command, string args) {
         switch (args) {
-            case "settings":
-            case "config":
-                DrawConfigUI();
-                break;
             case "widget":
-                WindowSystem.GetWindow("ReSanctuary Widget").IsOpen ^= true;
+                this.WidgetWindow.IsOpen ^= true;
                 break;
+
             default:
-                WindowSystem.GetWindow("ReSanctuary").IsOpen ^= true;
+                this.MainWindow.IsOpen ^= true;
                 break;
         }
     }
 
-    private void DrawUI() {
+    private void DrawUi() {
         WindowSystem.Draw();
     }
 
-    public void DrawConfigUI() {
-        WindowSystem.GetWindow("ReSanctuary Config").IsOpen = true;
+    public void DrawConfigUi() {
+        this.MainWindow.IsOpen = true;
     }
 }
