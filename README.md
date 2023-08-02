@@ -14,3 +14,8 @@ ReSanctuary is a [Dalamud](https://github.com/goatcorp/Dalamud) plugin to improv
 - Widget for quick access to information
 
 ReSanctuary's icon is from the Mutant Standard project.
+
+## A personal note
+
+I made ReSanctuary years ago in an effort to try and do something cool that nobody else has done before. As a result, the code quality is very very bad. I've tried my best to clean it up, but it's still jank (e.g. still reading raw Excel data because this was before they were added to SaintCoinach).
+

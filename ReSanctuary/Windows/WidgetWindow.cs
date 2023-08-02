@@ -42,7 +42,7 @@ public class WidgetWindow : Window {
             var mat = Utils.GetSortedGatheringItems().Find(x => x.ItemId == item.RowId);
             if (mat != null) {
                 var teri = this.plugin.IslandSanctuary.RowId;
-                Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+                Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, mat.Item.Icon);
             }
         }
 

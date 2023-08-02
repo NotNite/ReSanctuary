@@ -44,7 +44,7 @@ public class GatheringTab : MainWindowTab {
                 if (ImGui.Button("Show on map##ReSanctuary_ShowOnMap_" + item.ItemId)) {
                     var teri = Plugin.IslandSanctuary.RowId;
                     PluginLog.Debug("radius: {radius}", item.Radius);
-                    Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name);
+                    Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name, item.Item.Icon);
                 }
 
                 ImGui.SameLine();

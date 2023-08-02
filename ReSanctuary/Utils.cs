@@ -11,13 +11,13 @@ namespace ReSanctuary;
 
 public static class Utils {
     private static readonly Dictionary<uint, TextureWrap> IconCache = new();
-    
-    public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name) {
+
+    public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name, uint icon) {
         var agent = AgentMap.Instance();
         PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId, agent->CurrentMapId);
         if (teri != agent->CurrentTerritoryId) return;
 
-        agent->AddGatheringTempMarker(x, y, radius);
+        agent->AddGatheringTempMarker(x, y, radius, iconId: icon, tooltip: name);
         agent->OpenMap(agent->CurrentMapId, teri, name, MapType.GatheringLog);
     }
 
@@ -100,8 +100,8 @@ public static class Utils {
         var drops = new Dictionary<uint, string>();
 
         foreach (var item in creatures) {
-            drops.TryAdd(item.Item1Id, item.Item1?.Name ?? "???");
-            drops.TryAdd(item.Item2Id, item.Item2?.Name ?? "???");
+            drops.TryAdd(item.Item1.RowId, item.Item1.Name);
+            drops.TryAdd(item.Item2.RowId, item.Item2.Name);
         }
 
         return drops;

@@ -85,7 +85,7 @@ public class WorkshopTab : MainWindowTab {
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemId)) {
                             var teri = Plugin.IslandSanctuary.RowId;
 
-                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name);
+                            Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, mat.Item.Icon);
                         }
                     } else {
                         ImGui.Image(Utils.GetFromIconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec,

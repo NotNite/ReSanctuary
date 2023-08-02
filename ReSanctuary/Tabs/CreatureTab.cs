@@ -6,6 +6,7 @@ using Dalamud.Logging;
 using Dalamud.Utility;
 using ImGuiNET;
 using Lumina.Excel.GeneratedSheets;
+using ReSanctuary.Creature;
 using ReSanctuary.Windows;
 
 namespace ReSanctuary.Tabs;
@@ -74,7 +75,6 @@ public class CreatureTab : MainWindowTab {
                 }
 
                 ImGui.TableSetColumnIndex(3);
-
                 if (item.ExtraData != null) {
                     ImGui.Text(item.ExtraData.InGameX.ToString("F1") + ", " + item.ExtraData.InGameY.ToString("F1"));
                     ImGui.SameLine();
@@ -85,7 +85,7 @@ public class CreatureTab : MainWindowTab {
                         PluginLog.Debug("radius: {radius}", item.ExtraData.Radius);
 
                         Utils.OpenGatheringMarker(teri, (int) item.MarkerX, (int) item.MarkerZ, item.ExtraData.Radius,
-                                                  item.Name);
+                                                  item.Name, item.IconId);
                     }
                     ImGui.PopID();
                 } else {
@@ -94,7 +94,6 @@ public class CreatureTab : MainWindowTab {
 
 
                 ImGui.TableSetColumnIndex(4);
-                //spawn limits
                 if (item.ExtraData != null) {
                     if (item.ExtraData.Weather != null) {
                         var weatherEntry = this.Plugin.WeatherList[item.ExtraData.Weather.Value];
@@ -119,62 +118,41 @@ public class CreatureTab : MainWindowTab {
                 }
 
                 ImGui.TableSetColumnIndex(5);
+                this.DrawItem(item, item.Item1);
 
-                {
-                    var oneIconSize = ImGui.GetTextLineHeight() * 1.5f;
-                    var oneIconSizeVec = new Vector2(oneIconSize, oneIconSize);
-
-                    ImGui.Image(Utils.GetFromIconCache(item.Item1.Icon).ImGuiHandle, oneIconSizeVec, Vector2.Zero,
-                                Vector2.One);
-                    ImGui.SameLine();
-                    ImGui.Text(item.Item1ShortName);
-                    ImGui.SameLine();
-                    ImGui.PushID("ReSanctuary_CreatureItem_" + (int) item.CreatureId + "_" + (int) item.Item1Id);
-
-                    if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList)) {
-                        var rowId = this.Plugin.MJIItemPouchSheet.First(x => {
-                            var itemId = x.ReadColumn<uint>(0);
-                            var itemValue = this.Plugin.ItemSheet.GetRow(itemId);
-                            if (itemId == 0 || itemValue == null) return false;
-
-                            return itemValue.RowId == item.Item1Id;
-                        }).RowId;
-
-                        Utils.AddToTodoList(Plugin.Configuration, rowId);
-                    }
-                }
-
-                ImGui.PopID();
                 ImGui.TableSetColumnIndex(6);
-
-                {
-                    var twoIconSize = ImGui.GetTextLineHeight() * 1.5f;
-                    var twoIconSizeVec = new Vector2(twoIconSize, twoIconSize);
-
-                    ImGui.Image(Utils.GetFromIconCache(item.Item2.Icon).ImGuiHandle, twoIconSizeVec,
-                                Vector2.Zero, Vector2.One);
-                    ImGui.SameLine(0);
-                    ImGui.Text(item.Item2ShortName);
-                    ImGui.SameLine();
-                    ImGui.PushID("ReSanctuary_CreatureItem_" + (int) item.CreatureId + "_" + (int) item.Item2Id);
-
-                    if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList)) {
-                        var rowId = this.Plugin.MJIItemPouchSheet.First(x => {
-                            var itemId = x.ReadColumn<ushort>(0);
-                            var itemValue = this.Plugin.ItemSheet.GetRow(itemId);
-                            if (itemId == 0 || itemValue == null) return false;
-
-                            return itemValue.RowId == item.Item2Id;
-                        }).RowId;
-
-                        Utils.AddToTodoList(Plugin.Configuration, rowId);
-                    }
-                }
-
-                ImGui.PopID();
+                this.DrawItem(item, item.Item2);
             }
 
             ImGui.EndTable();
         }
+    }
+
+    private void DrawItem(CreatureItem creatureItem, Item item) {
+        var iconSize = ImGui.GetTextLineHeight() * 1.5f;
+        var iconSizeVec = new Vector2(iconSize, iconSize);
+
+        var itemName = item.Name.RawString.Replace("Sanctuary ", "");
+
+        ImGui.Image(Utils.GetFromIconCache(item.Icon).ImGuiHandle, iconSizeVec,
+                    Vector2.Zero, Vector2.One);
+        ImGui.SameLine();
+
+        ImGui.Text(itemName);
+        ImGui.SameLine();
+
+        ImGui.PushID("ReSanctuary_CreatureItem_" + (int) creatureItem.CreatureId + "_" + (int) item.RowId);
+        if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList)) {
+            var rowId = this.Plugin.MJIItemPouchSheet.First(x => {
+                var itemId = x.ReadColumn<uint>(0);
+                var itemValue = this.Plugin.ItemSheet.GetRow(itemId);
+                if (itemId == 0 || itemValue == null) return false;
+                return itemValue.RowId == item.RowId;
+            }).RowId;
+
+            Utils.AddToTodoList(Plugin.Configuration, rowId);
+        }
+
+        ImGui.PopID();
     }
 }
