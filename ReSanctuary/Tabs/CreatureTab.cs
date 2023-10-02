@@ -64,7 +64,8 @@ public class CreatureTab : MainWindowTab {
                 ImGui.TableSetColumnIndex(1);
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(Utils.GetFromIconCache(item.IconId).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(Plugin.TextureProvider.GetIcon(item.IconId)!.ImGuiHandle, iconSizeVec, Vector2.Zero,
+                            Vector2.One);
 
                 ImGui.TableSetColumnIndex(2);
                 var itemName = item.ExtraData?.Name;
@@ -82,7 +83,7 @@ public class CreatureTab : MainWindowTab {
                     if (ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt)) {
                         var teri = Plugin.IslandSanctuary.RowId;
 
-                        PluginLog.Debug("radius: {radius}", item.ExtraData.Radius);
+                        Plugin.PluginLog.Debug("radius: {radius}", item.ExtraData.Radius);
 
                         Utils.OpenGatheringMarker(teri, (int) item.MarkerX, (int) item.MarkerZ, item.ExtraData.Radius,
                                                   item.Name, item.IconId);
@@ -100,8 +101,9 @@ public class CreatureTab : MainWindowTab {
                         var weatherSize = ImGui.GetTextLineHeight() * 1.25f;
                         var weatherSizeVec = new Vector2(weatherSize, weatherSize);
                         var weatherIcon = weatherEntry.Icon;
-                        ImGui.Image(Utils.GetFromIconCache((uint) weatherIcon).ImGuiHandle, weatherSizeVec,
-                                    Vector2.Zero, Vector2.One);
+                        ImGui.Image(
+                            Plugin.TextureProvider.GetIcon((uint) weatherIcon)!.ImGuiHandle,
+                            weatherSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.Text(weatherEntry.Name);
                     }
@@ -134,8 +136,9 @@ public class CreatureTab : MainWindowTab {
 
         var itemName = item.Name.RawString.Replace("Sanctuary ", "");
 
-        ImGui.Image(Utils.GetFromIconCache(item.Icon).ImGuiHandle, iconSizeVec,
-                    Vector2.Zero, Vector2.One);
+        ImGui.Image(
+            Plugin.TextureProvider.GetIcon(item.Icon)!.ImGuiHandle, iconSizeVec,
+            Vector2.Zero, Vector2.One);
         ImGui.SameLine();
 
         ImGui.Text(itemName);

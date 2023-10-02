@@ -7,6 +7,7 @@ using ReSanctuary.Windows;
 using System.Collections.Generic;
 using Lumina.Excel.GeneratedSheets;
 using System.Linq;
+using Dalamud.Plugin.Services;
 using Lumina.Excel;
 using ReSanctuary.Creature;
 
@@ -17,21 +18,23 @@ public sealed class Plugin : IDalamudPlugin {
     private const string CommandName = "/psanctuary";
 
     [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
-    [PluginService] public static CommandManager CommandManager { get; private set; } = null!;
-    [PluginService] public static DataManager DataManager { get; private set; } = null!;
+    [PluginService] public static ICommandManager CommandManager { get; private set; } = null!;
+    [PluginService] public static IDataManager DataManager { get; private set; } = null!;
+    [PluginService] public static ITextureProvider TextureProvider { get; private set; } = null!;
+    [PluginService] public static IPluginLog PluginLog { get; private set; } = null!;
 
     public Configuration Configuration { get; private set; }
 
     public readonly WindowSystem WindowSystem = new("ReSanctuary");
     public readonly MainWindow MainWindow;
     public readonly WidgetWindow WidgetWindow;
-    
+
     public readonly List<GatheringItem> GatheringItems;
     public readonly List<WorkshopItem> WorkshopItems;
     public readonly List<CreatureItem> CreatureItems;
     public readonly Dictionary<uint, string> CreatureItemDrops;
     public readonly Dictionary<uint, Weather> WeatherList;
-    
+
     // ReSharper disable InconsistentNaming
     public readonly ExcelSheet<TerritoryType> TerritoryTypeSheet;
     public readonly ExcelSheet<Item> ItemSheet;
@@ -55,13 +58,13 @@ public sealed class Plugin : IDalamudPlugin {
 
         PluginInterface.UiBuilder.Draw += this.DrawUi;
         PluginInterface.UiBuilder.OpenConfigUi += this.DrawConfigUi;
-        
+
         this.TerritoryTypeSheet = DataManager.GetExcelSheet<TerritoryType>()!;
         this.ItemSheet = DataManager.GetExcelSheet<Item>()!;
         this.MJIItemPouchSheet = DataManager.Excel.GetSheetRaw("MJIItemPouch")!;
-        
+
         this.IslandSanctuary = this.TerritoryTypeSheet.First(x => x.Name == "h1m2");
-        
+
         this.GatheringItems = Utils.GetSortedGatheringItems();
         this.WorkshopItems = Utils.GetSortedWorkshopItems();
         this.CreatureItems = Utils.GetCreatureItems();

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Dalamud.Interface;
+using Dalamud.Interface.Utility;
 using Dalamud.Logging;
 using ImGuiNET;
 using ReSanctuary.Windows;
@@ -17,16 +18,16 @@ public class TodoTab : MainWindowTab {
         // ReSharper disable once InconsistentNaming
         foreach (var (id, _amount) in todoList) {
             var amount = _amount;
-            
+
             var itemPouchRow = this.Plugin.MJIItemPouchSheet.GetRow(id)!;
             var itemId = itemPouchRow.ReadColumn<uint>(0);
             var item = this.Plugin.ItemSheet.GetRow(itemId)!;
-            PluginLog.Debug($"id: {id}, itemId: {itemId}, icon: {item.Icon}o");
+            Plugin.PluginLog.Debug($"id: {id}, itemId: {itemId}, icon: {item.Icon}o");
 
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(Utils.GetFromIconCache(item.Icon).ImGuiHandle, iconSizeVec,
-                        Vector2.Zero, Vector2.One);
+            ImGui.Image(Plugin.TextureProvider.GetIcon(item.Icon)!.ImGuiHandle,
+                        iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.PushItemWidth(100 * ImGuiHelpers.GlobalScale);
             ImGui.SameLine();

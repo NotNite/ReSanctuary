@@ -48,7 +48,7 @@ public class WorkshopTab : MainWindowTab {
 
             var iconSize = ImGui.GetTextLineHeight() * 2f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(Utils.GetFromIconCache(item.Item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            ImGui.Image(Plugin.TextureProvider.GetIcon(item.Item.Icon)!.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.SameLine();
 
@@ -76,7 +76,7 @@ public class WorkshopTab : MainWindowTab {
                     var matIconSizeVec = new Vector2(matIconSize, matIconSize);
 
                     if (mat != null) {
-                        ImGui.Image(Utils.GetFromIconCache(mat.Item.Icon).ImGuiHandle, matIconSizeVec,
+                        ImGui.Image(Plugin.TextureProvider.GetIcon(mat.Item.Icon)!.ImGuiHandle, matIconSizeVec,
                                     Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.TextWrapped(
@@ -88,7 +88,7 @@ public class WorkshopTab : MainWindowTab {
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, mat.Item.Icon);
                         }
                     } else {
-                        ImGui.Image(Utils.GetFromIconCache(itemPouchItem.Icon).ImGuiHandle, matIconSizeVec,
+                        ImGui.Image(Plugin.TextureProvider.GetIcon(itemPouchItem.Icon)!.ImGuiHandle, matIconSizeVec,
                                     Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         if (this.Plugin.CreatureItemDrops.ContainsKey(itemPouchItem.RowId)) {

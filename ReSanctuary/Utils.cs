@@ -14,7 +14,7 @@ public static class Utils {
 
     public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name, uint icon) {
         var agent = AgentMap.Instance();
-        PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId, agent->CurrentMapId);
+        Plugin.PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId, agent->CurrentMapId);
         if (teri != agent->CurrentTerritoryId) return;
 
         agent->AddGatheringTempMarker(x, y, radius, iconId: icon, tooltip: name);
@@ -125,24 +125,10 @@ public static class Utils {
         foreach (var item in weathers) {
             var weatherRow = weatherSheet.GetRow(item)!;
             list.Add(item, weatherRow);
-            IconCachePreload((uint) weatherRow.Icon);
         }
 
         return list;
     }
-
-    public static void IconCachePreload(uint iconId) {
-        if (!IconCache.ContainsKey(iconId)) {
-            var icon = Plugin.DataManager.GetImGuiTextureIcon(iconId)!;
-            IconCache[iconId] = icon;
-        }
-    }
-
-    public static TextureWrap GetFromIconCache(uint iconId) {
-        IconCachePreload(iconId);
-        return IconCache[iconId];
-    }
-
 
     public static void AddToTodoList(Configuration config, uint id, int amount = 1) {
         var todoList = config.TodoList;

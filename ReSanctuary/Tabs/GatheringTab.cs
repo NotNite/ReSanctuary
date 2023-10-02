@@ -35,7 +35,9 @@ public class GatheringTab : MainWindowTab {
                 ImGui.TableSetColumnIndex(0);
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(Utils.GetFromIconCache(item.Item.Icon).ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+                ImGui.Image(
+                    Plugin.TextureProvider.GetIcon(item.Item.Icon)!.ImGuiHandle,
+                    iconSizeVec, Vector2.Zero, Vector2.One);
 
                 ImGui.TableSetColumnIndex(1);
                 ImGui.Text(item.Name);
@@ -43,7 +45,7 @@ public class GatheringTab : MainWindowTab {
                 ImGui.TableSetColumnIndex(2);
                 if (ImGui.Button("Show on map##ReSanctuary_ShowOnMap_" + item.ItemId)) {
                     var teri = Plugin.IslandSanctuary.RowId;
-                    PluginLog.Debug("radius: {radius}", item.Radius);
+                    Plugin.PluginLog.Debug("radius: {radius}", item.Radius);
                     Utils.OpenGatheringMarker(teri, item.X, item.Y, item.Radius, item.Name, item.Item.Icon);
                 }
 
@@ -56,7 +58,7 @@ public class GatheringTab : MainWindowTab {
                         if (itemId == 0 || pouchItem == null) return false;
                         return pouchItem.RowId == item.ItemId;
                     }).RowId;
-                    
+
                     Utils.AddToTodoList(Plugin.Configuration, rowId);
                 }
 
