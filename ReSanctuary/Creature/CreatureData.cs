@@ -1,4 +1,4 @@
-﻿namespace ReSanctuary.Creature;
+namespace ReSanctuary.Creature;
 
 internal class CreatureData {
     public const uint WeatherClear = 1;
@@ -164,7 +164,7 @@ internal class CreatureData {
         },
         14923 => new CreatureExtraData {
             Name = "Glyptodon",
-            SpawnStart = null,
+            SpawnStart = 0,
             SpawnEnd = 3,
             Weather = null,
             InGameX = 31.9,
@@ -236,7 +236,7 @@ internal class CreatureData {
         },
         14931 => new CreatureExtraData {
             Name = "Beachcomb",
-            SpawnStart = null,
+            SpawnStart = 0,
             SpawnEnd = 3,
             Weather = WeatherRain,
             InGameX = 18,
@@ -296,6 +296,105 @@ internal class CreatureData {
             InGameX = 19.4,
             InGameY = 19.0,
             Radius = 10
+        },
+        14936 => new CreatureExtraData {
+            Name = "Quartz Spriggan",
+            SpawnStart = null,
+            SpawnEnd = null,
+            Weather = null,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        14937 => new CreatureExtraData {
+            Name = "Amethyst Spriggan",
+            SpawnStart = 21,
+            SpawnEnd = 0,
+            Weather = null,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        14938 => new CreatureExtraData {
+            Name = "Wild Boar",
+            SpawnStart = null,
+            SpawnEnd = null,
+            Weather = null,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        14939 => new CreatureExtraData {
+            Name = "Boar of Paradise",
+            SpawnStart = null,
+            SpawnEnd = null,
+            Weather = WeatherShowers,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        14940 => new CreatureExtraData {
+            Name = "Weird Spriggan",
+            SpawnStart = 0,
+            SpawnEnd = 3,
+            Weather = WeatherFog,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        16340 => new CreatureExtraData {
+            Name = "Funguar",
+            SpawnStart = 15,
+            SpawnEnd = 18,
+            Weather = WeatherRain,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        16341 => new CreatureExtraData {
+            Name = "Alkonost",
+            SpawnStart = 21,
+            SpawnEnd = 0,
+            Weather = WeatherClear,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        16628 => new CreatureExtraData {
+            Name = "Morbol",
+            SpawnStart = 21,
+            SpawnEnd = 0,
+            Weather = WeatherShowers,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        16629 => new CreatureExtraData {
+            Name = "Adamantoise",
+            SpawnStart = 12,
+            SpawnEnd = 15,
+            Weather = WeatherFog,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        16630 => new CreatureExtraData {
+            Name = "Pteranodon",
+            SpawnStart = 9,
+            SpawnEnd = 12,
+            Weather = WeatherClear,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
+        },
+        16631 => new CreatureExtraData {
+            Name = "Grand Doblyn",
+            SpawnStart = 3,
+            SpawnEnd = 6,
+            Weather = WeatherFair,
+            InGameX = 0,
+            InGameY = 0,
+            Radius = 20
         },
         _ => null
     };
