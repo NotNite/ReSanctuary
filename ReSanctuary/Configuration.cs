@@ -13,17 +13,14 @@ public class Configuration : IPluginConfiguration {
     public Dictionary<uint, DateTime> TodoListCreature { get; set; } = new();
     public List<uint> CreatureFilterHide { get; set; } = new();
     public bool LockWidget { get; set; }
-    
 
+    [NonSerialized] private DalamudPluginInterface? pluginInterface;
 
-    // the below exist just to make saving less cumbersome
-    [NonSerialized] private DalamudPluginInterface? PluginInterface;
-
-    public void Initialize(DalamudPluginInterface pluginInterface) {
-        PluginInterface = pluginInterface;
+    public void Initialize(DalamudPluginInterface pi) {
+        this.pluginInterface = pi;
     }
 
     public void Save() {
-        PluginInterface!.SavePluginConfig(this);
+        this.pluginInterface!.SavePluginConfig(this);
     }
 }
