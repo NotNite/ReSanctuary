@@ -76,7 +76,7 @@ public class CreatureTab : MainWindowTab {
                 }
 
                 ImGui.TableSetColumnIndex(3);
-                if (item.ExtraData != null) {
+                if (item.ExtraData != null && item.ExtraData.InGameX != 0 && item.ExtraData.InGameY != 0) {
                     ImGui.Text(item.ExtraData.InGameX.ToString("F1") + ", " + item.ExtraData.InGameY.ToString("F1"));
                     ImGui.SameLine();
                     ImGui.PushID("ReSanctuary_CreatureMap_" + (int) item.CreatureId);
