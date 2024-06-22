@@ -1,4 +1,4 @@
-﻿using Dalamud.Data;
+using Dalamud.Data;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
@@ -58,6 +58,7 @@ public sealed class Plugin : IDalamudPlugin {
 
         PluginInterface.UiBuilder.Draw += this.DrawUi;
         PluginInterface.UiBuilder.OpenConfigUi += this.DrawConfigUi;
+        PluginInterface.UiBuilder.OpenMainUi += this.DrawConfigUi;
 
         this.TerritoryTypeSheet = DataManager.GetExcelSheet<TerritoryType>()!;
         this.ItemSheet = DataManager.GetExcelSheet<Item>()!;
