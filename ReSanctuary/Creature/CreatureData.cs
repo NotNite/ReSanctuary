@@ -302,99 +302,99 @@ internal class CreatureData {
             SpawnStart = null,
             SpawnEnd = null,
             Weather = null,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 26.8,
+            InGameY = 20.9,
+            Radius = 50
         },
         14937 => new CreatureExtraData {
             Name = "Amethyst Spriggan",
             SpawnStart = 21,
             SpawnEnd = 0,
             Weather = null,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 28,
+            InGameY = 16,
+            Radius = 10
         },
         14938 => new CreatureExtraData {
             Name = "Wild Boar",
             SpawnStart = null,
             SpawnEnd = null,
             Weather = null,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 16,
+            InGameY = 16,
+            Radius = 80
         },
         14939 => new CreatureExtraData {
             Name = "Boar of Paradise",
             SpawnStart = null,
             SpawnEnd = null,
             Weather = WeatherShowers,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 17,
+            InGameY = 16, 
+            Radius = 10
         },
         14940 => new CreatureExtraData {
             Name = "Weird Spriggan",
             SpawnStart = 0,
             SpawnEnd = 3,
             Weather = WeatherFog,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 24,
+            InGameY = 18,
+            Radius = 10
         },
         16340 => new CreatureExtraData {
             Name = "Funguar",
             SpawnStart = 15,
             SpawnEnd = 18,
             Weather = WeatherRain,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 20,
+            InGameY = 27,
+            Radius = 10
         },
         16341 => new CreatureExtraData {
             Name = "Alkonost",
             SpawnStart = 21,
             SpawnEnd = 0,
             Weather = WeatherClear,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 23,
+            InGameY = 30.5,
+            Radius = 10
         },
         16628 => new CreatureExtraData {
             Name = "Morbol",
             SpawnStart = 21,
             SpawnEnd = 0,
             Weather = WeatherShowers,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 29,
+            InGameY = 24,
+            Radius = 10
         },
         16629 => new CreatureExtraData {
             Name = "Adamantoise",
             SpawnStart = 12,
             SpawnEnd = 15,
             Weather = WeatherFog,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 32,
+            InGameY = 12.5,
+            Radius = 10
         },
         16630 => new CreatureExtraData {
             Name = "Pteranodon",
             SpawnStart = 9,
             SpawnEnd = 12,
             Weather = WeatherClear,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX = 25,
+            InGameY = 16,
+            Radius = 10
         },
         16631 => new CreatureExtraData {
             Name = "Grand Doblyn",
             SpawnStart = 3,
             SpawnEnd = 6,
             Weather = WeatherFair,
-            InGameX = 0,
-            InGameY = 0,
-            Radius = 20
+            InGameX =  24,
+            InGameY = 21,
+            Radius = 10
         },
         _ => null
     };
