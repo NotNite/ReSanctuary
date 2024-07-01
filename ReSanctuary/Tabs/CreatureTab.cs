@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Textures;
 using Dalamud.Logging;
 using Dalamud.Utility;
 using ImGuiNET;
@@ -64,7 +65,8 @@ public class CreatureTab : MainWindowTab {
                 ImGui.TableSetColumnIndex(1);
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(Plugin.TextureProvider.GetIcon(item.IconId)!.ImGuiHandle, iconSizeVec, Vector2.Zero,
+                ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(item.IconId).GetWrapOrEmpty().ImGuiHandle,
+                            iconSizeVec, Vector2.Zero,
                             Vector2.One);
 
                 ImGui.TableSetColumnIndex(2);
@@ -102,7 +104,7 @@ public class CreatureTab : MainWindowTab {
                         var weatherSizeVec = new Vector2(weatherSize, weatherSize);
                         var weatherIcon = weatherEntry.Icon;
                         ImGui.Image(
-                            Plugin.TextureProvider.GetIcon((uint) weatherIcon)!.ImGuiHandle,
+                            Plugin.TextureProvider.GetFromGameIcon((uint) weatherIcon).GetWrapOrEmpty().ImGuiHandle,
                             weatherSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.Text(weatherEntry.Name);
@@ -137,7 +139,8 @@ public class CreatureTab : MainWindowTab {
         var itemName = item.Name.RawString.Replace("Sanctuary ", "");
 
         ImGui.Image(
-            Plugin.TextureProvider.GetIcon(item.Icon)!.ImGuiHandle, iconSizeVec,
+            Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+            iconSizeVec,
             Vector2.Zero, Vector2.One);
         ImGui.SameLine();
 

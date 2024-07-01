@@ -1,4 +1,5 @@
 using System.Numerics;
+using Dalamud.Interface.Textures;
 using ImGuiNET;
 using ReSanctuary.Windows;
 
@@ -48,7 +49,9 @@ public class WorkshopTab : MainWindowTab {
 
             var iconSize = ImGui.GetTextLineHeight() * 2f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(Plugin.TextureProvider.GetIcon(item.Item.Icon)!.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+            ImGui.Image(
+                Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+                iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.SameLine();
 
@@ -76,8 +79,10 @@ public class WorkshopTab : MainWindowTab {
                     var matIconSizeVec = new Vector2(matIconSize, matIconSize);
 
                     if (mat != null) {
-                        ImGui.Image(Plugin.TextureProvider.GetIcon(mat.Item.Icon)!.ImGuiHandle, matIconSizeVec,
-                                    Vector2.Zero, Vector2.One);
+                        ImGui.Image(
+                            Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(mat.Item.Icon)).GetWrapOrEmpty()
+                                  .ImGuiHandle, matIconSizeVec,
+                            Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.TextWrapped(
                             $"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
@@ -88,7 +93,7 @@ public class WorkshopTab : MainWindowTab {
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, mat.Item.Icon);
                         }
                     } else {
-                        ImGui.Image(Plugin.TextureProvider.GetIcon(itemPouchItem.Icon)!.ImGuiHandle, matIconSizeVec,
+                        ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(itemPouchItem.Icon)).GetWrapOrEmpty().ImGuiHandle, matIconSizeVec,
                                     Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         if (this.Plugin.CreatureItemDrops.ContainsKey(itemPouchItem.RowId)) {

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Dalamud.Interface;
+using Dalamud.Interface.Textures;
 using Dalamud.Interface.Utility;
 using Dalamud.Logging;
 using ImGuiNET;
@@ -26,7 +27,7 @@ public class TodoTab : MainWindowTab {
 
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(Plugin.TextureProvider.GetIcon(item.Icon)!.ImGuiHandle,
+            ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().ImGuiHandle,
                         iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.PushItemWidth(100 * ImGuiHelpers.GlobalScale);

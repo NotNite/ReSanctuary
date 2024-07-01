@@ -14,9 +14,9 @@ public class Configuration : IPluginConfiguration {
     public List<uint> CreatureFilterHide { get; set; } = new();
     public bool LockWidget { get; set; }
 
-    [NonSerialized] private DalamudPluginInterface? pluginInterface;
+    [NonSerialized] private IDalamudPluginInterface? pluginInterface;
 
-    public void Initialize(DalamudPluginInterface pi) {
+    public void Initialize(IDalamudPluginInterface pi) {
         this.pluginInterface = pi;
     }
 

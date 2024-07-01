@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
+using Dalamud.Interface.Textures;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
@@ -34,7 +35,8 @@ public class WidgetWindow : Window {
     private void DrawGarbage(int amount, Item item, int has) {
         var iconSize = ImGui.GetTextLineHeight() * 1.25f;
         var iconSizeVec = new Vector2(iconSize, iconSize);
-        ImGui.Image(Plugin.TextureProvider.GetIcon(item.Icon)!.ImGuiHandle, iconSizeVec, Vector2.Zero, Vector2.One);
+        ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+                    iconSizeVec, Vector2.Zero, Vector2.One);
 
         ImGui.SameLine();
 
