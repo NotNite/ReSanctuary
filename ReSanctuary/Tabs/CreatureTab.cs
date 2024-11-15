@@ -3,10 +3,8 @@ using System.Numerics;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Textures;
-using Dalamud.Logging;
-using Dalamud.Utility;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using ReSanctuary.Creature;
 using ReSanctuary.Windows;
 
@@ -45,7 +43,7 @@ public class CreatureTab : MainWindowTab {
                 var weather = item.ExtraData?.Weather;
                 var weatherMatches = false;
                 if (weather != null && this.Plugin.WeatherList.TryGetValue(weather.Value, out var weatherData)) {
-                    var name = weatherData.Name.ToDalamudString().TextValue;
+                    var name = weatherData.Name.ExtractText();
                     weatherMatches = name.ToLower().Contains(this.filter.ToLower());
                 }
 
@@ -107,7 +105,7 @@ public class CreatureTab : MainWindowTab {
                             Plugin.TextureProvider.GetFromGameIcon((uint) weatherIcon).GetWrapOrEmpty().ImGuiHandle,
                             weatherSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
-                        ImGui.Text(weatherEntry.Name);
+                        ImGui.Text(weatherEntry.Name.ExtractText());
                     }
 
                     if (item.ExtraData.SpawnStart != null && item.ExtraData.SpawnEnd != null) {
@@ -136,7 +134,7 @@ public class CreatureTab : MainWindowTab {
         var iconSize = ImGui.GetTextLineHeight() * 1.5f;
         var iconSizeVec = new Vector2(iconSize, iconSize);
 
-        var itemName = item.Name.RawString.Replace("Sanctuary ", "");
+        var itemName = item.Name.ExtractText().Replace("Sanctuary ", "");
 
         ImGui.Image(
             Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().ImGuiHandle,
@@ -149,13 +147,7 @@ public class CreatureTab : MainWindowTab {
 
         ImGui.PushID("ReSanctuary_CreatureItem_" + (int) creatureItem.CreatureId + "_" + (int) item.RowId);
         if (ImGuiComponents.IconButton(FontAwesomeIcon.ClipboardList)) {
-            var rowId = this.Plugin.MJIItemPouchSheet.First(x => {
-                var itemId = x.ReadColumn<uint>(0);
-                var itemValue = this.Plugin.ItemSheet.GetRow(itemId);
-                if (itemId == 0 || itemValue == null) return false;
-                return itemValue.RowId == item.RowId;
-            }).RowId;
-
+            var rowId = this.Plugin.MJIItemPouchSheet.First(x => x.Item.RowId == item.RowId).RowId;
             Utils.AddToTodoList(Plugin.Configuration, rowId);
         }
 

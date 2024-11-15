@@ -21,9 +21,7 @@ public class TodoTab : MainWindowTab {
             var amount = _amount;
 
             var itemPouchRow = this.Plugin.MJIItemPouchSheet.GetRow(id)!;
-            var itemId = itemPouchRow.ReadColumn<uint>(0);
-            var item = this.Plugin.ItemSheet.GetRow(itemId)!;
-            Plugin.PluginLog.Debug($"id: {id}, itemId: {itemId}, icon: {item.Icon}o");
+            var item = itemPouchRow.Item.Value;
 
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
@@ -56,7 +54,7 @@ public class TodoTab : MainWindowTab {
             ImGui.PopFont();
 
             ImGui.SameLine();
-            ImGui.Text(item.Name);
+            ImGui.Text(item.Name.ExtractText());
         }
     }
 }

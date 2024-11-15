@@ -1,5 +1,4 @@
-﻿using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+﻿using Lumina.Excel.Sheets;
 
 namespace ReSanctuary.Creature;
 
@@ -20,9 +19,7 @@ public class CreatureItem {
     public readonly byte Size;
 
     public Item Item1;
-    public uint Item1Id;
     public Item Item2;
-    public uint Item2Id;
 
     public float MarkerX;
     public float MarkerZ;
@@ -33,17 +30,14 @@ public class CreatureItem {
     public string Item1ShortName => this.GetItemName(this.Item1);
     public string Item2ShortName => this.GetItemName(this.Item2);
 
-    public CreatureItem(RowParser row) {
-        this.CreatureId = row.ReadColumn<uint>(0);
-        this.IconId = (uint) row.ReadColumn<int>(6);
-        this.UiIndex = row.RowId;
-        this.Size = row.ReadColumn<byte>(1);
+    public CreatureItem(MJIAnimals current) {
+        this.CreatureId = current.BNpcBase.RowId;
+        this.IconId = (uint)current.Icon;
+        this.UiIndex = current.RowId;
+        this.Size = current.Size;
 
-        var itemSheet = Plugin.DataManager.Excel.GetSheet<Item>()!;
-        this.Item1Id = row.ReadColumn<uint>(4);
-        this.Item1 = itemSheet.GetRow(this.Item1Id)!;
-        this.Item2Id = row.ReadColumn<uint>(5);
-        this.Item2 = itemSheet.GetRow(this.Item2Id)!;
+        this.Item1 = current.Reward[0].Value;
+        this.Item2 = current.Reward[1].Value;
 
         this.ExtraData = CreatureData.GetCreatureExtraData(this.CreatureId);
 
@@ -61,5 +55,5 @@ public class CreatureItem {
     }
 
     private string GetItemName(Item? item)
-        => item?.Name.RawString.Replace("Sanctuary ", "") ?? "???";
+        => item?.Name.ExtractText().Replace("Sanctuary ", "") ?? "???";
 }

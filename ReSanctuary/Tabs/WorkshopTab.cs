@@ -68,7 +68,7 @@ public class WorkshopTab : MainWindowTab {
             ImGui.Text("Materials:");
             foreach (var (requiredMat, matCount) in item.Materials) {
                 var itemPouchRow = this.Plugin.MJIItemPouchSheet.GetRow(requiredMat)!;
-                var itemPouchItem = this.Plugin.ItemSheet.GetRow(itemPouchRow.ReadColumn<uint>(0))!;
+                var itemPouchItem = itemPouchRow.Item.Value;
                 var mat = this.Plugin.GatheringItems.Find(x => x.ItemId == itemPouchItem.RowId);
 
                 var name = itemPouchItem.Name;
@@ -85,7 +85,7 @@ public class WorkshopTab : MainWindowTab {
                             Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.TextWrapped(
-                            $"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Name : "None")}");
+                            $"Required tool: {(mat.RequiredTool != null ? mat.RequiredTool.Value.Name : "None")}");
 
                         if (ImGui.Button("Show on map##ReSanctuary_WorkshopShowOnMap_" + mat.ItemId)) {
                             var teri = Plugin.IslandSanctuary.RowId;

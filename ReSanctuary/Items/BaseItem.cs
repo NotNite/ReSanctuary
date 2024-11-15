@@ -1,21 +1,11 @@
-﻿using Dalamud.Utility;
-using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+﻿using Lumina.Excel.Sheets;
 
 namespace ReSanctuary;
 
-public abstract class BaseItem {
-    public readonly string Name;
-    public readonly Item Item;
-    public readonly uint ItemId;
-    public readonly uint RowId;
-    public readonly byte UiIndex;
-
-    protected BaseItem(RowParser row, Item item, byte uiIndex) {
-        this.Name = item.Name.ToDalamudString().TextValue;
-        this.Item = item;
-        this.ItemId = item.RowId;
-        this.RowId = row.RowId;
-        this.UiIndex = uiIndex;
-    }
+public abstract class BaseItem(Item item) {
+    public readonly string Name = item.Name.ExtractText();
+    public readonly Item Item = item;
+    public readonly uint ItemId = item.RowId;
+    public uint RowId;
+    public byte UiIndex;
 }

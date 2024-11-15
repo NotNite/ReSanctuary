@@ -1,11 +1,10 @@
 ﻿using System.Numerics;
-using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Textures;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace ReSanctuary.Windows;
 
@@ -58,14 +57,14 @@ public class WidgetWindow : Window {
         // i just got home from class and i am exhausted. here is some very bad unoptimized code\
         foreach (var (id, amount) in todoList) {
             var itemPouchItem = this.plugin.MJIItemPouchSheet.GetRow(id)!;
-            var item = this.plugin.ItemSheet.GetRow(itemPouchItem.ReadColumn<uint>(0))!;
+            var item = itemPouchItem.Item.Value;
             var has = Utils.GetStackSize(item.RowId);
             if (has < amount) DrawGarbage(amount, item, has);
         }
 
         foreach (var (id, amount) in todoList) {
             var itemPouchItem = this.plugin.MJIItemPouchSheet.GetRow(id)!;
-            var item = this.plugin.ItemSheet.GetRow(itemPouchItem.ReadColumn<uint>(0))!;
+            var item = itemPouchItem.Item.Value;
             var has = Utils.GetStackSize(item.RowId);
             if (has >= amount) DrawGarbage(amount, item, has);
         }

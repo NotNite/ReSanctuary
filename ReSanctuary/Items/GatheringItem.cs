@@ -1,5 +1,4 @@
-﻿using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+﻿using Lumina.Excel.Sheets;
 
 namespace ReSanctuary;
 
@@ -9,11 +8,12 @@ public class GatheringItem : BaseItem {
     public readonly short Y;
     public readonly ushort Radius;
 
-    public GatheringItem(RowParser gatheringItem, Item item, Item? tool)
-        : base(gatheringItem, item, gatheringItem.ReadColumn<byte>(1)) {
-        RequiredTool = tool;
-        X = gatheringItem.ReadColumn<short>(3);
-        Y = gatheringItem.ReadColumn<short>(4);
-        Radius = gatheringItem.ReadColumn<ushort>(5);
+    public GatheringItem(MJIGatheringItem current, Item? tool) : base(current.Item.Value) {
+        this.RowId = current.RowId;
+        this.UiIndex = current.Sort;
+        this.RequiredTool = tool;
+        this.X = current.X;
+        this.Y = current.Y;
+        this.Radius = current.Radius;
     }
 }

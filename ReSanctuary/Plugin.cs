@@ -1,20 +1,18 @@
-using Dalamud.Data;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using ReSanctuary.Windows;
 using System.Collections.Generic;
-using Lumina.Excel.GeneratedSheets;
 using System.Linq;
 using Dalamud.Plugin.Services;
 using Lumina.Excel;
+using Lumina.Excel.Sheets;
 using ReSanctuary.Creature;
 
 namespace ReSanctuary;
 
 public sealed class Plugin : IDalamudPlugin {
-    public string Name => "ReSanctuary";
     private const string CommandName = "/psanctuary";
 
     [PluginService] public static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
@@ -38,7 +36,7 @@ public sealed class Plugin : IDalamudPlugin {
     // ReSharper disable InconsistentNaming
     public readonly ExcelSheet<TerritoryType> TerritoryTypeSheet;
     public readonly ExcelSheet<Item> ItemSheet;
-    public readonly RawExcelSheet MJIItemPouchSheet;
+    public readonly ExcelSheet<MJIItemPouch> MJIItemPouchSheet;
     // ReSharper restore InconsistentNaming
 
     public readonly TerritoryType IslandSanctuary;
@@ -62,7 +60,7 @@ public sealed class Plugin : IDalamudPlugin {
 
         this.TerritoryTypeSheet = DataManager.GetExcelSheet<TerritoryType>()!;
         this.ItemSheet = DataManager.GetExcelSheet<Item>()!;
-        this.MJIItemPouchSheet = DataManager.Excel.GetSheetRaw("MJIItemPouch")!;
+        this.MJIItemPouchSheet = DataManager.Excel.GetSheet<MJIItemPouch>();
 
         this.IslandSanctuary = this.TerritoryTypeSheet.First(x => x.Name == "h1m2");
 

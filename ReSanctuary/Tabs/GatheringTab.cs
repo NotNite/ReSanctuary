@@ -26,7 +26,7 @@ public class GatheringTab : MainWindowTab {
             ImGui.TableHeadersRow();
 
             foreach (var item in this.Plugin.GatheringItems) {
-                var reqToolString = item.RequiredTool != null ? item.RequiredTool.Name : "None";
+                var reqToolString = item.RequiredTool != null ? item.RequiredTool.Value.Name.ExtractText() : "None";
 
                 if (!item.Name.ToLower().Contains(this.filter.ToLower())
                     && !reqToolString.ToLower().Contains(this.filter.ToLower())) continue;
@@ -53,12 +53,7 @@ public class GatheringTab : MainWindowTab {
                 ImGui.SameLine();
 
                 if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.Item)) {
-                    var rowId = this.Plugin.MJIItemPouchSheet.First(x => {
-                        var itemId = x.ReadColumn<uint>(0);
-                        var pouchItem = this.Plugin.ItemSheet.GetRow(itemId);
-                        if (itemId == 0 || pouchItem == null) return false;
-                        return pouchItem.RowId == item.ItemId;
-                    }).RowId;
+                    var rowId = this.Plugin.MJIItemPouchSheet.First(x => x.Item.RowId == item.ItemId).RowId;
 
                     Utils.AddToTodoList(Plugin.Configuration, rowId);
                 }

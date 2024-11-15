@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace ReSanctuary;
 
@@ -9,17 +10,16 @@ public class WorkshopItem : BaseItem {
     public readonly ushort Value;
     public readonly List<(ushort requiredMat, ushort matCount)> Materials = new();
 
-    public WorkshopItem(RowParser workshopItem, Item item) : base(workshopItem, item, (byte) workshopItem.RowId) {
-        CraftingTime = workshopItem.ReadColumn<ushort>(13);
-        Value = workshopItem.ReadColumn<ushort>(14);
+    public WorkshopItem(MJICraftworksObject current) : base(current.Item.Value) {
+        this.RowId = current.RowId;
+        this.UiIndex = (byte) current.RowId;
 
-        for (var i = 4;; i += 2) {
-            var requiredMat = workshopItem.ReadColumn<ushort>(i);
-            var matCount = workshopItem.ReadColumn<ushort>(i + 1);
+        CraftingTime = current.CraftingTime;
+        Value = current.Value;
 
-            if (matCount == 0) break;
-
-            Materials.Add((requiredMat, matCount));
+        foreach (var (mat, count) in current.Material.Zip(current.Amount)) {
+            if (count == 0) break;
+            Materials.Add(((ushort) mat.RowId, count));
         }
     }
 }

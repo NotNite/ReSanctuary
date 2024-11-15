@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiScene;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using ReSanctuary.Creature;
 using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
 
@@ -14,7 +13,8 @@ public static class Utils {
 
     public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name, uint icon) {
         var agent = AgentMap.Instance();
-        Plugin.PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId, agent->CurrentMapId);
+        Plugin.PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId,
+                               agent->CurrentMapId);
         if (teri != agent->CurrentTerritoryId) return;
 
         agent->AddGatheringTempMarker(x, y, radius, iconId: icon, tooltip: name);
@@ -22,10 +22,9 @@ public static class Utils {
     }
 
     public static List<GatheringItem> GetSortedGatheringItems() {
-        var gatheringSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIGatheringItem")!;
-        var itemSheet = Plugin.DataManager.Excel.GetSheet<Item>()!;
-        var keyItemSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIKeyItem")!;
-        var gatheringToolSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIGatheringTool")!;
+        var gatheringSheet = Plugin.DataManager.Excel.GetSheet<MJIGatheringItem>();
+        var keyItemSheet = Plugin.DataManager.Excel.GetSheet<MJIKeyItem>()!;
+        var gatheringToolSheet = Plugin.DataManager.Excel.GetSheet<MJIGatheringTool>()!;
 
         var items = new List<GatheringItem>();
         using var enumerator = gatheringSheet.GetEnumerator();
@@ -34,19 +33,15 @@ public static class Utils {
         while (enumerator.MoveNext()) {
             var current = enumerator.Current;
 
-            var itemId = current.ReadColumn<uint>(0);
-            var item = itemSheet.GetRow(itemId)!;
-
             Item? tool = null;
-            var toolId = current.ReadColumn<byte>(2);
+            var toolId = current.Unknown0;
             if (toolId > 0) {
-                var gatheringToolId = gatheringToolSheet.GetRow(toolId)!.ReadColumn<byte>(0);
+                var gatheringToolId = gatheringToolSheet.GetRow(toolId)!.Unknown0;
                 var toolRow = keyItemSheet.GetRow(gatheringToolId)!;
-                var toolItemId = toolRow.ReadColumn<int>(0);
-                tool = itemSheet.GetRow((uint) toolItemId);
+                tool = toolRow.Item.Value;
             }
 
-            var gi = new GatheringItem(current, item, tool);
+            var gi = new GatheringItem(current, tool);
             items.Add(gi);
         }
 
@@ -56,18 +51,15 @@ public static class Utils {
     }
 
     public static List<WorkshopItem> GetSortedWorkshopItems() {
-        var craftingSheet = Plugin.DataManager.Excel.GetSheetRaw("MJICraftworksObject")!;
+        var craftingSheet = Plugin.DataManager.Excel.GetSheet<MJICraftworksObject>();
         var itemSheet = Plugin.DataManager.Excel.GetSheet<Item>()!;
 
         var items = new List<WorkshopItem>();
         using var enumerator = craftingSheet.GetEnumerator();
         while (enumerator.MoveNext()) {
             var current = enumerator.Current;
-
-            var itemId = current.ReadColumn<ushort>(0);
-            if (itemId > 0) {
-                var item = itemSheet.GetRow(itemId)!;
-                var wi = new WorkshopItem(current, item);
+            if (current.Item.RowId != 0) {
+                var wi = new WorkshopItem(current);
                 items.Add(wi);
             }
         }
@@ -78,13 +70,13 @@ public static class Utils {
     }
 
     public static List<CreatureItem> GetCreatureItems() {
-        var creatureSheet = Plugin.DataManager.Excel.GetSheetRaw("MJIAnimals")!;
+        var creatureSheet = Plugin.DataManager.Excel.GetSheet<MJIAnimals>();
         var creatures = new List<CreatureItem>();
         using var enumerator = creatureSheet.GetEnumerator();
 
         while (enumerator.MoveNext()) {
             var current = enumerator.Current;
-            var creatureId = current.ReadColumn<uint>(0);
+            var creatureId = current.BNpcBase.RowId;
             if (creatureId > 0) {
                 var ci = new CreatureItem(current);
                 creatures.Add(ci);
@@ -100,8 +92,8 @@ public static class Utils {
         var drops = new Dictionary<uint, string>();
 
         foreach (var item in creatures) {
-            drops.TryAdd(item.Item1.RowId, item.Item1.Name);
-            drops.TryAdd(item.Item2.RowId, item.Item2.Name);
+            drops.TryAdd(item.Item1.RowId, item.Item1.Name.ExtractText());
+            drops.TryAdd(item.Item2.RowId, item.Item2.Name.ExtractText());
         }
 
         return drops;
@@ -111,7 +103,7 @@ public static class Utils {
         var dropList = new List<string>();
 
         foreach (var item in creatures) {
-            if (item.Item1Id == itemId || item.Item2Id == itemId) dropList.Add(item.ExtraData?.Name ?? "???");
+            if (item.Item2.RowId == itemId || item.Item2.RowId == itemId) dropList.Add(item.ExtraData?.Name ?? "???");
         }
 
         return dropList;
