@@ -3,6 +3,6 @@
     <Import Project="Dalamud.Plugin.Bootstrap.targets"/>
 
     <PropertyGroup>
-        <Version>1.4.0.1</Version>
+        <Version>1.4.0.2</Version>
     </PropertyGroup>
 </Project>

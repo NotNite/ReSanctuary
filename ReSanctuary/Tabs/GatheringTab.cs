@@ -52,7 +52,7 @@ public class GatheringTab : MainWindowTab {
 
                 ImGui.SameLine();
 
-                if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.Item)) {
+                if (ImGui.Button("Add to todo list##ReSanctuary_GatheringAddTodo_" + item.ItemId)) {
                     var rowId = this.Plugin.MJIItemPouchSheet.First(x => x.Item.RowId == item.ItemId).RowId;
 
                     Utils.AddToTodoList(Plugin.Configuration, rowId);
