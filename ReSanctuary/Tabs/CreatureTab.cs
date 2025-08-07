@@ -3,7 +3,7 @@ using System.Numerics;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Textures;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
 using ReSanctuary.Creature;
 using ReSanctuary.Windows;
@@ -63,7 +63,7 @@ public class CreatureTab : MainWindowTab {
                 ImGui.TableSetColumnIndex(1);
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
-                ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(item.IconId).GetWrapOrEmpty().ImGuiHandle,
+                ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(item.IconId).GetWrapOrEmpty().Handle,
                             iconSizeVec, Vector2.Zero,
                             Vector2.One);
 
@@ -102,7 +102,7 @@ public class CreatureTab : MainWindowTab {
                         var weatherSizeVec = new Vector2(weatherSize, weatherSize);
                         var weatherIcon = weatherEntry.Icon;
                         ImGui.Image(
-                            Plugin.TextureProvider.GetFromGameIcon((uint) weatherIcon).GetWrapOrEmpty().ImGuiHandle,
+                            Plugin.TextureProvider.GetFromGameIcon((uint) weatherIcon).GetWrapOrEmpty().Handle,
                             weatherSizeVec, Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.Text(weatherEntry.Name.ExtractText());
@@ -137,7 +137,7 @@ public class CreatureTab : MainWindowTab {
         var itemName = item.Name.ExtractText().Replace("Sanctuary ", "");
 
         ImGui.Image(
-            Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+            Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().Handle,
             iconSizeVec,
             Vector2.Zero, Vector2.One);
         ImGui.SameLine();

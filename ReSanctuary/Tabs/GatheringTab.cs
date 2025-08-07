@@ -2,7 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Interface.Textures;
 using Dalamud.Logging;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ReSanctuary.Windows;
 
 namespace ReSanctuary.Tabs;
@@ -37,7 +37,7 @@ public class GatheringTab : MainWindowTab {
                 var iconSize = ImGui.GetTextLineHeight() * 1.5f;
                 var iconSizeVec = new Vector2(iconSize, iconSize);
                 ImGui.Image(
-                    Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+                    Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Item.Icon)).GetWrapOrEmpty().Handle,
                     iconSizeVec, Vector2.Zero, Vector2.One);
 
                 ImGui.TableSetColumnIndex(1);

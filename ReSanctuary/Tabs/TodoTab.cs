@@ -3,7 +3,7 @@ using Dalamud.Interface;
 using Dalamud.Interface.Textures;
 using Dalamud.Interface.Utility;
 using Dalamud.Logging;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ReSanctuary.Windows;
 
 namespace ReSanctuary.Tabs;
@@ -25,12 +25,13 @@ public class TodoTab : MainWindowTab {
 
             var iconSize = ImGui.GetTextLineHeight() * 1.25f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
-            ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+            ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Icon)).GetWrapOrEmpty().Handle,
                         iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.PushItemWidth(100 * ImGuiHelpers.GlobalScale);
             ImGui.SameLine();
             if (ImGui.InputInt($"##ReSanctuary_TodoList_{id}", ref amount, 1, 2,
+                               default,
                                ImGuiInputTextFlags.EnterReturnsTrue)) {
                 if (amount > 0) {
                     todoList[id] = amount;

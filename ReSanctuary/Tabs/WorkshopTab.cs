@@ -1,6 +1,6 @@
 using System.Numerics;
 using Dalamud.Interface.Textures;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ReSanctuary.Windows;
 
 namespace ReSanctuary.Tabs;
@@ -20,7 +20,7 @@ public class WorkshopTab : MainWindowTab {
             ImGui.BeginChild("ReSanctuary_WorkshopListSearchChild", childSize);
 
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-            ImGui.InputText(string.Empty, ref this.filter, 256);
+            ImGui.InputText("##ReSanctuary_WorkshopListSearchInput", ref this.filter, 256);
 
             if (ImGui.BeginListBox("##ReSanctuary_WorkshopList", ImGui.GetContentRegionAvail())) {
                 for (var i = 0; i < this.Plugin.WorkshopItems.Count; i++) {
@@ -50,7 +50,7 @@ public class WorkshopTab : MainWindowTab {
             var iconSize = ImGui.GetTextLineHeight() * 2f;
             var iconSizeVec = new Vector2(iconSize, iconSize);
             ImGui.Image(
-                Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Item.Icon)).GetWrapOrEmpty().ImGuiHandle,
+                Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(item.Item.Icon)).GetWrapOrEmpty().Handle,
                 iconSizeVec, Vector2.Zero, Vector2.One);
 
             ImGui.SameLine();
@@ -81,7 +81,7 @@ public class WorkshopTab : MainWindowTab {
                     if (mat != null) {
                         ImGui.Image(
                             Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(mat.Item.Icon)).GetWrapOrEmpty()
-                                  .ImGuiHandle, matIconSizeVec,
+                                  .Handle, matIconSizeVec,
                             Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         ImGui.TextWrapped(
@@ -93,7 +93,7 @@ public class WorkshopTab : MainWindowTab {
                             Utils.OpenGatheringMarker(teri, mat.X, mat.Y, mat.Radius, mat.Name, mat.Item.Icon);
                         }
                     } else {
-                        ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(itemPouchItem.Icon)).GetWrapOrEmpty().ImGuiHandle, matIconSizeVec,
+                        ImGui.Image(Plugin.TextureProvider.GetFromGameIcon(new GameIconLookup(itemPouchItem.Icon)).GetWrapOrEmpty().Handle, matIconSizeVec,
                                     Vector2.Zero, Vector2.One);
                         ImGui.SameLine();
                         if (this.Plugin.CreatureItemDrops.ContainsKey(itemPouchItem.RowId)) {

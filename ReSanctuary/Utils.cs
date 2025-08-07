@@ -9,8 +9,6 @@ using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
 namespace ReSanctuary;
 
 public static class Utils {
-    private static readonly Dictionary<uint, TextureWrap> IconCache = new();
-
     public static unsafe void OpenGatheringMarker(uint teri, int x, int y, int radius, string name, uint icon) {
         var agent = AgentMap.Instance();
         Plugin.PluginLog.Debug("current teri/map: {currentTeri} {currentMap}", agent->CurrentTerritoryId,

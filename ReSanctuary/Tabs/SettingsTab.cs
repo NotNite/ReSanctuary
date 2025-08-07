@@ -1,4 +1,4 @@
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ReSanctuary.Windows;
 
 namespace ReSanctuary.Tabs; 
