@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using ImGuiScene;
 using Lumina.Excel.Sheets;
 using ReSanctuary.Creature;
 using MapType = FFXIVClientStructs.FFXIV.Client.UI.Agent.MapType;
